@@ -32,4 +32,20 @@ public class DataCenter {
 		id = Long.parseLong(last_num)+1;
 		return id;
 	}
+
+	/**
+	 * 모든 태그들을 리스트로 만들어 반환
+	 */
+	public static List<String> getTags(){
+
+	}
+
+	public static Memo getMemo(long memoId){
+		String memoText = RawData.readFile(getRealPath("memo/"+memoId));
+
+	}
+
+	public static Memo getMemo(String tag){
+
+	}
 }
