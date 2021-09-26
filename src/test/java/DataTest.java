@@ -4,6 +4,6 @@ public class DataTest{
 	
 	@Test
 	public void password(){
-		assertThat(com.rst.jsp_memo.data.MetaData.getLoginPassword()).isEqualTo("testpw");
+		assertThat(com.rst.jsp_memo.data.DataCenter.getLoginPassword()).isEqualTo("testpw");
 	}
 }
