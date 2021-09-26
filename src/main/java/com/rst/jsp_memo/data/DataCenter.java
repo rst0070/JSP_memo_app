@@ -22,14 +22,14 @@ public class DataCenter {
 	}
 	
 	public static String getLoginPassword(){
-		String password = "";
-		password = RawData.readFile( getRealPath( LOGIN_FILE_PATH ) );
+		String password = RawData.readFile( getRealPath( LOGIN_FILE_PATH ) );
 		return password;
 	}
 	
 	public static long getNewMemoId(){
-		long id = 1;
-		
-		return long;
+		long id;
+		String last_num = RawData.readFile( getRealPath( "last_memo_num" ) );
+		id = Long.parseLong(last_num)+1;
+		return id;
 	}
 }
