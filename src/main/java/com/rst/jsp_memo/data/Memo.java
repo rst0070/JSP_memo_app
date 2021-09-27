@@ -1,17 +1,17 @@
 package com.rst.jsp_memo.data;
-
-import java.util.List;
 import java.util.LinkedList;
 
 public class Memo {
 	
 	private long MEMO_ID;
-	private List<String> tags;
+	private LinkedList<String> tags;
+	private String title;
 	private String contents;
 
-	private Memo(List<String> tags, String title, String contents, long memo_id){
+	private Memo(LinkedList<String> tags, String title, String contents, long memo_id){
 		MEMO_ID = memo_id;
 		this.tags = tags;
+		this.title = title;
 		this.contents = contents;
 	}
 
@@ -21,7 +21,7 @@ public class Memo {
 	 * @contents: 메모의 내용
 	 * 올바르지 않은 입력을 주었을시 null 반환
 	 */
-	public static Memo createMemo(List<String> tags, String title, String contents){
+	public static Memo createMemo(LinkedList<String> tags, String title, String contents){
 		
 		Memo memo = null;
 
@@ -35,12 +35,18 @@ public class Memo {
 	}
 
 	public long getMemoId(){return this.MEMO_ID;}
+
+	public String getTitle(){return new String(this.title);}
+
 	public String getContents(){return new String(this.contents);}
-	public List<String> getTagList(){
-		return (List<String>)((LinkedList)(this.tags)).clone();
+
+	public LinkedList<String> getTagList(){
+		return (LinkedList<String>)(this.tags).clone();
 	}
 
 	public void setMemoId(long id){	this.MEMO_ID = id;}
+
 	public void setContents(String contents){	this.contents = contents;}
+
 	public void setTagList(LinkedList<String> list){	this.tags = list;}
 }

@@ -7,8 +7,10 @@ import java.util.*;
  * 즉 메모객체를 저장하는 스태틱팩토리이자
  * 마지막 메모아이디를 가지고 있으며
  * 메모들의 변경사항을 저장하는 기능을 담당한다.
+ * 
+ * data 패키지 외부의 클래스에서 접근 불가.
  */
-public class MemoRepository {
+class MemoRepository {
     
     private static HashMap<Long, Memo> MEMO_MAP = new HashMap<Long, Memo>(10);
 
@@ -17,24 +19,31 @@ public class MemoRepository {
      * @param memo_id
      * @return 관리되면 true 아니면 false
      */
-    public static boolean isContain(long memo_id){
+    protected static boolean isContain(long memo_id){
         boolean result = MEMO_MAP.containsKey(memo_id);
         return result;
     }
 
-    public static void putMemo(Memo m){
+    protected static void putMemo(Memo m){
         MEMO_MAP.put( m.getMemoId(), m);
     }
 
-    public static Memo getMemo(long memo_id){
+    protected static Memo getMemo(long memo_id){
         return MEMO_MAP.get(memo_id);
     }
 
-
+    /**
+     * MemoRepository상에서 해당 id를 가진 메모를 지운다.
+     * 로컬에 저장된 파일을 삭제하는것은 다른 문제!
+     * @param long memo_id repository에서 제거하고자 하는 메모의 아이디.
+     */
+    protected static void removeMemo(long memo_id){
+        MEMO_MAP.remove(memo_id);
+    }
     /**
      * 메모레퍼지토리의 모든 내용들을 로컬파일에 입력한다.
      */
-    public static void saveChanged(){
+    protected static void saveChanged(){
         Collection<Memo> col = MEMO_MAP.values();
         Iterator<Memo> it = col.iterator();
         Memo m;

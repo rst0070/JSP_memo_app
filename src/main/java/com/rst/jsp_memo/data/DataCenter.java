@@ -1,7 +1,6 @@
 package com.rst.jsp_memo.data;
 
 import java.util.StringTokenizer;
-import java.util.List;
 import java.util.LinkedList;
 /**
 This is static factory class about meta data.
@@ -40,7 +39,7 @@ public class DataCenter {
 	 * @param tags_text: 탭으로 태그들이 구분된 태그목록
 	 * @return 각 태그를 하나의 원소로 하는 리스트를 반환
 	 */
-	private static List<String> getTagsFromText(String tags_text){
+	private static LinkedList<String> getTagsFromText(String tags_text){
 		StringTokenizer tags = new StringTokenizer(tags_text);
 
 		LinkedList<String> tag_list = new LinkedList<String>();
@@ -57,9 +56,9 @@ public class DataCenter {
 	 * 모든 태그들을 리스트로 만들어 반환
 	 * 이때 모든 태그를 담고있는 파일은 탭으로 태그들을 구분한다.
 	 */
-	public static List<String> getAllTags(){
+	public static LinkedList<String> getAllTags(){
 		String tags_file = RawData.readFile( getRealPath(TAGS_FILE_PATH) );
-		List<String> list = getTagsFromText(tags_file);
+		LinkedList<String> list = getTagsFromText(tags_file);
 
 		return list;
 	}
@@ -84,7 +83,7 @@ public class DataCenter {
 			String[] data = memoText.split("\n", 3);
 			String title = (data[1].split("\t",2))[1];
 	
-			List<String> tags = getTagsFromText(data[0]);
+			LinkedList<String> tags = getTagsFromText(data[0]);
 			memo = Memo.createMemo(tags, title, data[2]);
 		}
 		
@@ -92,7 +91,7 @@ public class DataCenter {
 	}
 
 
-	private static List<Long> getMemoListByTag(String tag){
+	private static LinkedList<Long> getMemoListByTag(String tag){
 		String file = RawData.readFile( getRealPath( "tags/"+tag ) );
 		StringTokenizer memos = new StringTokenizer(file);
 
@@ -106,9 +105,14 @@ public class DataCenter {
 		return memo_list;
 	}
 
-	public static List<Memo> getMemosByTag(String tag){
-		LinkedList<Long> ids = (LinkedList)getMemoListByTag(tag);
-		List<Memo> memo_list = new LinkedList<Memo>();
+	/**
+	 * 해당 tag를 가지는 모든 메모들을 LinkedList<Memo>형식으로 모아 반환.
+	 * @param tag 태그명
+	 * @return LinkedList<Memo> 해당 메모들
+	 */
+	public static LinkedList<Memo> getMemosByTag(String tag){
+		LinkedList<Long> ids = getMemoListByTag(tag);
+		LinkedList<Memo> memo_list = new LinkedList<Memo>();
 		while(!ids.isEmpty()){
 			Memo m = getMemo(((Long)( ids.pop() )).longValue());
 			memo_list.add(m);
@@ -117,9 +121,8 @@ public class DataCenter {
 	}
 
 	/**
-	 * 애플리케이션 관점에서 새로운 메모를 만든다. 즉 객체만 생성하는 것이 아닌
-	 * 로컬 파일로 저장되는 개념
 	 * 
+	 * 애플리케이션에서 관리될 메모를 만든다.
 	 * 따라서 MemoRepository에도 등록되어 관리된다.
 	 * 
 	 * @param tags
@@ -127,7 +130,7 @@ public class DataCenter {
 	 * @param contents
 	 * @return 생성된 메모객체 오류 발생시 null
 	 */
-	public static Memo createMemo(List<String> tags, String title, String contents){
+	public static Memo createMemo(LinkedList<String> tags, String title, String contents){
 		Memo m = Memo.createMemo(tags, title, contents);
 		if(m != null){ 
 			MemoRepository.putMemo(m);
@@ -136,8 +139,35 @@ public class DataCenter {
 	}
 
 
+	/**
+	 * memo_id를 가지는 메모를 메모 레퍼지토리, 로컬상에서 삭제한다.
+	 * @param long memo_id
+	 */
+	public static void deleteMemo(long memo_id){
 
-	public static void writeMemoOnFile(Memo m){
+		MemoRepository.removeMemo(memo_id);
+		String path = getRealPath("memo/"+memo_id);
+		RawData.deleteFile(path);
+	}
 
+
+	/**
+	 * 파라미터로 주어진 메모 m을 로컬파일로 저장한다.
+	 * memo repository에서 변경사항을 저장할때 이용할 예정.(saveChanges메소드에서)
+	 * @param Memo m
+	 */
+	protected static void writeMemoOnFile(Memo m){
+		LinkedList<String> memo_tags = m.getTagList();
+		String file_path = getRealPath("memo/"+m.getMemoId());
+		
+		String file_tags = "tags:\t";
+		while( !memo_tags.isEmpty() ){
+			file_tags += '\t'+memo_tags.pop();
+		}
+
+		String file_title = "title:\t"+m.getTitle();
+		String file_contents = m.getContents();
+
+		RawData.writeFile( file_path, file_tags+'\n'+file_title+'\n'+file_contents);
 	}
 }
