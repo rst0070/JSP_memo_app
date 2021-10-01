@@ -91,6 +91,11 @@ public class DataCenter {
 	}
 
 
+	/**
+	 * 특정 tag를 같는 메모들의 아이디를 리스트로 반환한다.
+	 * @param tag 찾을 메모들의 공통아이디
+	 * @return LinkedList<Long> 메모들의 아이디가 Long값으로 들어있는 리스트
+	 */
 	private static LinkedList<Long> getMemoListByTag(String tag){
 		String file = RawData.readFile( getRealPath( "tags/"+tag ) );
 		StringTokenizer memos = new StringTokenizer(file);
@@ -122,7 +127,7 @@ public class DataCenter {
 
 	/**
 	 * 
-	 * 애플리케이션에서 관리될 메모를 만든다.
+	 * 애플리케이션에서 관리될 새로운 메모를 만든다.
 	 * 따라서 MemoRepository에도 등록되어 관리된다.
 	 * 
 	 * @param tags

@@ -1,44 +1,26 @@
 package com.rst.jsp_memo.data;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.OutputStreamWriter;
-
-
-
-import java.net.URI;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.*;
 /**
 This is static factory class
 aim to read text files.
 data 패키지 내부의 클래스에서만 접근가능
 */ 
-class RawData {
-	
-	private static ClassLoader classLoader;
-	
-	static{
-		classLoader = RawData.class.getClassLoader();
-	}
+public class RawData {
 	
 	
+	/**
+	 * 파일의 절대경로를 입력하면 파일의 전체 내용을 반환한다.
+	 * @param path
+	 * @return
+	 */
+	public static String readFile(String path) throws ReadWriteException{
 	
-	protected static String readFile(String path){
 		String result = "";
 		
 		try{
-			URI uri = classLoader.getResource(path).toURI();
-			
-			File file = new File(uri);
-			
+			File file = new File(path);
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 			
 			String line;
@@ -47,38 +29,38 @@ class RawData {
 			}
 			
 			br.close();
+		}catch(FileNotFoundException e){
+			throw new ReadWriteException( ReadWriteException.FILE_NOT_FOUND, e.getMessage() );
 		}catch(IOException e){
-			e.printStackTrace();
-		}catch(URISyntaxException e){
-			e.printStackTrace();
+			throw new ReadWriteException(ReadWriteException.IO_DENIED, e.getMessage() );
 		}
 		
 		return result;
 	}
 	
-	protected static boolean writeFile(String path, String contents){
-		
-		boolean isError = false;
-		
+	/**
+	 * 지정한 경로에 파일작성
+	 * @param path - 작성할 파일의 절대경로
+	 * @param contetns - 작성할 파일의 내용
+	 * @throws 
+	 */
+	public static void writeFile(String path, String contents) throws ReadWriteException{
+	
 		try{
-			URI uri = classLoader.getResource(path).toURI();
-			
-			File file = new File(uri);
+			File file = new File(path);
 			
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
 			bw.write(contents, 0, contents.length());
 			
 			bw.flush();
 			bw.close();
+		}catch(SecurityException e){
+			throw new ReadWriteException( ReadWriteException.SECURITY_BLOCKED, e.getMessage() );
+		}catch(FileNotFoundException e){
+			throw new ReadWriteException( ReadWriteException.FILE_NOT_FOUND, e.getMessage() );
 		}catch(IOException e){
-			e.printStackTrace();
-			isError = true;
-		}catch(URISyntaxException e){
-			e.printStackTrace();
-			isError = true;
+			throw new ReadWriteException( ReadWriteException.IO_DENIED, e.getMessage() );
 		}
-		
-		return !isError;
 	}
 
 	/**
@@ -86,19 +68,12 @@ class RawData {
 	 * 파일이 존재하는지 확인하고 삭제함!
 	 * @param path
 	 */
-	protected static void deleteFile(String path){
+	public static void deleteFile(String path) throws ReadWriteException{
 		try{
-			URI uri = classLoader.getResource(path).toURI();
-			
-			File file = new File(uri);
+			File file = new File(path);
 			if( file.exists() ) file.delete();
-		}catch(URISyntaxException e){
-			e.printStackTrace();
-		}catch(NullPointerException e){
-			e.printStackTrace();
-		}catch(IllegalArgumentException e){
-			e.printStackTrace();
+		}catch(SecurityException e){
+			throw new ReadWriteException( ReadWriteException.SECURITY_BLOCKED, e.getMessage() );
 		}
-		
 	} 
 }
