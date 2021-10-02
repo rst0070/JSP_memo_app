@@ -1,4 +1,4 @@
-package data;
+package com.rst.jsp_memo.data;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import com.rst.jsp_memo.data.DataCenter;

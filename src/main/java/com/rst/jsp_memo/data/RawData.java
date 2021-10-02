@@ -7,7 +7,7 @@ This is static factory class
 aim to read text files.
 data 패키지 내부의 클래스에서만 접근가능
 */ 
-public class RawData {
+class RawData {
 	
 	
 	/**
@@ -15,7 +15,7 @@ public class RawData {
 	 * @param path
 	 * @return
 	 */
-	public static String readFile(String path) throws ReadWriteException{
+	protected static String readFile(String path) throws ReadWriteException{
 	
 		String result = "";
 		
@@ -44,7 +44,7 @@ public class RawData {
 	 * @param contetns - 작성할 파일의 내용
 	 * @throws 
 	 */
-	public static void writeFile(String path, String contents) throws ReadWriteException{
+	protected static void writeFile(String path, String contents) throws ReadWriteException{
 	
 		try{
 			File file = new File(path);
@@ -68,7 +68,7 @@ public class RawData {
 	 * 파일이 존재하는지 확인하고 삭제함!
 	 * @param path
 	 */
-	public static void deleteFile(String path) throws ReadWriteException{
+	protected static void deleteFile(String path) throws ReadWriteException{
 		try{
 			File file = new File(path);
 			if( file.exists() ) file.delete();
