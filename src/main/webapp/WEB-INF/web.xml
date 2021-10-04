@@ -9,9 +9,17 @@
         <servlet-name>MainPage</servlet-name>
         <servlet-class>com.rst.jsp_memo.servlet.MainPage</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>LoginAction</servlet-name>
+        <servlet-class>com.rst.jsp_memo.servlet.LoginAction</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>MainPage</servlet-name>
         <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginAction</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 </web-app>

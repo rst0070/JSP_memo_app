@@ -31,7 +31,7 @@ public class LoginAction extends HttpServlet{
 		if(password.equals(realPassword)){
 			HttpSession session = request.getSession();
 			session.setAttribute("login", "true");
-			//response.sendRedirect("/index.jsp");
+			response.sendRedirect("/main");
 		}else{
 			response.sendRedirect("/login.jsp");
 		}	
