@@ -1,4 +1,4 @@
-package com.rst.jsp_memo.servlet;
+package com.rst.jsp_memo.controller;
 
 import java.io.*;
 

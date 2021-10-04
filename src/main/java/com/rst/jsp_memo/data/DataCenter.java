@@ -12,7 +12,7 @@ public class DataCenter {
 	private static final String LOGIN_FILE_PATH = "login_pw.txt";
 	private static final String TAGS_FILE_PATH = "tags.csv";
 	static{
-		DATA_FOLDER_PATH = RawData.readFile("data_position.txt");
+		DATA_FOLDER_PATH = "/workspace/JSP_memo_app/data";
 	}
 	
 	/**
@@ -22,12 +22,12 @@ public class DataCenter {
 		return DATA_FOLDER_PATH+'/'+path;
 	}
 	
-	public static String getLoginPassword(){
+	public static String getLoginPassword() throws ReadWriteException{
 		String password = RawData.readFile( getRealPath( LOGIN_FILE_PATH ) );
 		return password;
 	}
 	
-	public static long getNewMemoId(){
+	public static long getNewMemoId() throws ReadWriteException {
 		long id;
 		String last_num = RawData.readFile( getRealPath( "last_memo_num" ) );
 		id = Long.parseLong(last_num)+1;
@@ -56,7 +56,7 @@ public class DataCenter {
 	 * 모든 태그들을 리스트로 만들어 반환
 	 * 이때 모든 태그를 담고있는 파일은 탭으로 태그들을 구분한다.
 	 */
-	public static LinkedList<String> getAllTags(){
+	public static LinkedList<String> getAllTags() throws ReadWriteException {
 		String tags_file = RawData.readFile( getRealPath(TAGS_FILE_PATH) );
 		LinkedList<String> list = getTagsFromText(tags_file);
 
@@ -73,7 +73,7 @@ public class DataCenter {
 	 * contents......
 	 * 
 	 */
-	public static Memo getMemo(long memoId){
+	public static Memo getMemo(long memoId) throws ReadWriteException{
 		Memo memo;
 		if(MemoRepository.isContain(memoId)){
 			memo = MemoRepository.getMemo(memoId);
@@ -96,7 +96,7 @@ public class DataCenter {
 	 * @param tag 찾을 메모들의 공통아이디
 	 * @return LinkedList<Long> 메모들의 아이디가 Long값으로 들어있는 리스트
 	 */
-	private static LinkedList<Long> getMemoListByTag(String tag){
+	private static LinkedList<Long> getMemoListByTag(String tag) throws ReadWriteException {
 		String file = RawData.readFile( getRealPath( "tags/"+tag ) );
 		StringTokenizer memos = new StringTokenizer(file);
 
@@ -115,7 +115,7 @@ public class DataCenter {
 	 * @param tag 태그명
 	 * @return LinkedList<Memo> 해당 메모들
 	 */
-	public static LinkedList<Memo> getMemosByTag(String tag){
+	public static LinkedList<Memo> getMemosByTag(String tag) throws ReadWriteException {
 		LinkedList<Long> ids = getMemoListByTag(tag);
 		LinkedList<Memo> memo_list = new LinkedList<Memo>();
 		while(!ids.isEmpty()){
@@ -135,7 +135,7 @@ public class DataCenter {
 	 * @param contents
 	 * @return 생성된 메모객체 오류 발생시 null
 	 */
-	public static Memo createMemo(LinkedList<String> tags, String title, String contents){
+	public static Memo createMemo(LinkedList<String> tags, String title, String contents) throws ReadWriteException{
 		Memo m = Memo.createMemo(tags, title, contents);
 		if(m != null){ 
 			MemoRepository.putMemo(m);
@@ -148,7 +148,7 @@ public class DataCenter {
 	 * memo_id를 가지는 메모를 메모 레퍼지토리, 로컬상에서 삭제한다.
 	 * @param long memo_id
 	 */
-	public static void deleteMemo(long memo_id){
+	public static void deleteMemo(long memo_id) throws ReadWriteException{
 
 		MemoRepository.removeMemo(memo_id);
 		String path = getRealPath("memo/"+memo_id);
@@ -161,7 +161,7 @@ public class DataCenter {
 	 * memo repository에서 변경사항을 저장할때 이용할 예정.(saveChanges메소드에서)
 	 * @param Memo m
 	 */
-	protected static void writeMemoOnFile(Memo m){
+	protected static void writeMemoOnFile(Memo m) throws ReadWriteException{
 		LinkedList<String> memo_tags = m.getTagList();
 		String file_path = getRealPath("memo/"+m.getMemoId());
 		

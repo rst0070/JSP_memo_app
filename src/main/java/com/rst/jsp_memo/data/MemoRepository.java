@@ -44,7 +44,7 @@ class MemoRepository {
      * 메모레퍼지토리의 모든 내용들을 로컬파일에 입력한다.
      * 이때 DataCenter.writeMemoOnFile() 을 이용한다.
      */
-    protected static void saveChanged(){
+    protected static void saveChanged() throws ReadWriteException{
         Collection<Memo> col = MEMO_MAP.values();
         Iterator<Memo> it = col.iterator();
         Memo m;

@@ -12,6 +12,12 @@
 DataCenter를 이용해서 메모에 접근한다.
 5. DataCenter는 아직 읽지 않은 메모는 local에서 불러오고 읽은 메모는 MemoRepository에서 가져온다. 또 메모를 local에 저장하기도한다. 
 
+# MVC모델 구현방법
+1. 로그인 페이지 같은 간단한 페이지가 아닌 이상 servlet에서 request를 받는다.
+2. servlet은 com.rst.jsp_memo.model패키지를 활용하여 데이터를 저장한다.
+3. servlet에서 데이터 저장후 response.redirect를 이용해 jsp를 호출한다.
+4. jsp에서 com.rst.jsp_memo.model에 접근하여 데이터를 이용한다.
+
 ### reference
 * [maven](https://youtube.com/playlist?list=PL92E89440B7BFD0F6)
 * [jsp & servlet](https://youtube.com/playlist?list=PLE0F6C1917A427E96)
