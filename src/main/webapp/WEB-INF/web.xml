@@ -6,17 +6,17 @@
   <display-name>Archetype Created Web Application</display-name>
     
     <servlet>
-        <servlet-name>MainPage</servlet-name>
-        <servlet-class>com.rst.jsp_memo.servlet.MainPage</servlet-class>
+        <servlet-name>TagPage</servlet-name>
+        <servlet-class>com.rst.jsp_memo.controller.MemosByTag</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginAction</servlet-name>
-        <servlet-class>com.rst.jsp_memo.servlet.LoginAction</servlet-class>
+        <servlet-class>com.rst.jsp_memo.controller.LoginAction</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>MainPage</servlet-name>
-        <url-pattern>/main</url-pattern>
+        <servlet-name>TagPage</servlet-name>
+        <url-pattern>/tag/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginAction</servlet-name>

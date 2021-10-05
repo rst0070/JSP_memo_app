@@ -1,5 +1,4 @@
 <%@ page contentType = "text/html;charset=utf-8" %>
-<%@ page import="com.rst.jsp_memo.data.MetaData" %>
 <!DOCTYPE html>
 <html>
 <head>
