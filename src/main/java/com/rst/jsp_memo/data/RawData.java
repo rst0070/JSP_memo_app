@@ -12,6 +12,7 @@ class RawData {
 	
 	/**
 	 * 파일의 절대경로를 입력하면 파일의 전체 내용을 반환한다.
+	 * 이때 \n 도 포함한다! (마지막줄 미포함.)
 	 * @param path
 	 * @return
 	 */
@@ -25,9 +26,11 @@ class RawData {
 			
 			String line;
 			while((line = br.readLine())!= null){
-				result += line;
+				result += line+'\n';
 			}
 			
+			if(result.length() > 1) result = result.substring(0, result.length()-1);
+			//마지막 \n제거
 			br.close();
 		}catch(FileNotFoundException e){
 			throw new ReadWriteException( ReadWriteException.FILE_NOT_FOUND, e.getMessage() );

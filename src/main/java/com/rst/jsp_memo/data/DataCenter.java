@@ -2,6 +2,7 @@ package com.rst.jsp_memo.data;
 
 import java.util.StringTokenizer;
 import java.util.LinkedList;
+import java.util.Scanner;
 /**
 This is static factory class about meta data.
 
@@ -44,8 +45,7 @@ public class DataCenter {
 
 		LinkedList<String> tag_list = new LinkedList<String>();
 
-		int i = tags.countTokens();
-		while(i-- > 0){
+		while(tags.hasMoreTokens()){
 			tag_list.add( tags.nextToken() );
 		}
 
@@ -64,6 +64,8 @@ public class DataCenter {
 	}
 
 	/**
+	 * 
+	 * 
 	 * 각 메모는 아래와 같은 형식을 갖는다.
 	 * 이때 태그들은 탭으로 구분
 	 * 타이틀 키워드와 실제 타이틀도 탭으로 구분
@@ -72,6 +74,7 @@ public class DataCenter {
 	 * title:	this is test memo
 	 * contents......
 	 * 
+	 * https://stackoverflow.com/questions/1096621/read-string-line-by-line
 	 */
 	public static Memo getMemo(long memoId) throws ReadWriteException{
 		Memo memo;
@@ -80,11 +83,23 @@ public class DataCenter {
 		}else{
 			String memoText = RawData.readFile(getRealPath("memo/"+memoId));
 
-			String[] data = memoText.split("\n", 3);
-			String title = (data[1].split("\t",2))[1];
+			Scanner scan = new Scanner(memoText);
 	
-			LinkedList<String> tags = getTagsFromText(data[0]);
-			memo = Memo.createMemo(tags, title, data[2]);
+			String[] splited = scan.nextLine().split("\t");
+			LinkedList<String> tags = getTagsFromText(splited[1]);
+
+			splited = scan.nextLine().split("\t");
+			String title = splited[1];
+			String contents = "";
+
+			while(scan.hasNextLine()){
+				contents += scan.nextLine()+'\n';
+			}
+			//마지막 \n제거
+			contents = contents.substring(0, contents.length() - 1);
+			memo = Memo.createMemo(tags, title, contents);
+
+			scan.close();
 		}
 		
 		return memo;
