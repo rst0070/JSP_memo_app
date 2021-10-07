@@ -29,7 +29,7 @@ public class LoginAction extends HttpServlet{
 		
 		//예외 발생하지 않을시 session 작업
 		//main page로 redirect한다.
-		if(password.equals(realPassword)){
+		if(password != null && password.equals(realPassword)){
 			HttpSession session = request.getSession();
 			session.setAttribute("login", "true");
 			response.sendRedirect("/tag/memo");

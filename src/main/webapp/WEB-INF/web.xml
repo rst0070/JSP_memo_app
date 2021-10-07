@@ -5,6 +5,16 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
     
+
+    <filter>
+        <filter-name>LoginCheck</filter-name>
+        <filter-class>com.rst.jsp_memo.filter.LoginCheck</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>LoginCheck</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>TagPage</servlet-name>
         <servlet-class>com.rst.jsp_memo.controller.MemosByTag</servlet-class>
