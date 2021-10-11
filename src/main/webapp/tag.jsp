@@ -1,30 +1,26 @@
 <!DOCTYPE html>
-<% 
-import com.rst.jsp_memo.model.*;
-import com.rst.jsp_memo.data.Memo;
-import java.util.*;
+<%@ page import = "com.rst.jsp_memo.model.*" %>
+<%@ page import = "com.rst.jsp_memo.data.Memo" %>
+<%@ page import = "java.util.*" %>
+<%
+    String sessionId = request.getId();
+
+    TagDataModel model = (TagDataModel)Repository.get(sessionId);
+    String TAG_NAME = model.getTagName();
+    LinkedList<Memo> memoList = model.getMemoList();
+
 %>
 <html>
 <head>
-
+    <title>JSP_MEMO_<%= TAG_NAME %></title>
 </head>
 <body>
-    <%
-        try{
+    <div class="menu_pannel">
 
-        }
-        String sessionId = request.getId();
+    </div>
+    <div>
 
-        TagDataModel model = (TagDataModel)Repository.get(sessionId);
-        String TAG_NAME = model.getTagName();
-        LinkedList<Memo> memoList = model.getMemoList();
-
-    %>
-
-    <h1><%= TAG_NAME %></h1>
-    <% for(Memo m : memoList ){ %>
-        <p><%= m.getTitle() %></p>
-    <% } %>
+    </div>
 </body>
 
 </html>
