@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="login.css"/>
+	<link rel="stylesheet" type="text/css" href="static/login.css"/>
 </head>
 <body>
 	<form id="login-box" action="/login" method="POST">
