@@ -21,14 +21,12 @@ public class Memo {
 	 * @contents: 메모의 내용
 	 * 올바르지 않은 입력을 주었을시 null 반환
 	 */
-	public static Memo createMemo(LinkedList<String> tags, String title, String contents) throws ReadWriteException{
+	public static Memo createMemo(long memoId, LinkedList<String> tags, String title, String contents) throws ReadWriteException{
 		
 		Memo memo = null;
 
 		if(title.length() != 0 && contents.length() != 0){
-
-			long id = DataCenter.getNewMemoId();
-			memo = new Memo(tags, title, contents, id);
+			memo = new Memo(tags, title, contents, memoId);
 		}
 		
 		return memo;

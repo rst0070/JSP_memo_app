@@ -57,6 +57,14 @@
             %>
                 <div class="memo" id="MEMO<%= m.getMemoId() %>">
                     <div contenteditable="true" class="memoTitle"><%= m.getTitle() %></div>
+                    <div contenteditable="true" class="memoTags">
+                        <% 
+                        Iterator<String> tags = m.getTagList().iterator();
+                        while( tags.hasNext() ){
+                            out.print('#'+tags.next());
+                        }
+                        %>
+                    </div>
                     <div contenteditable="true" class="memoContent"><%= m.getContents() %></div>
                     <button class="memoModify" onClick="modifyMemo(<%= m.getMemoId() %>);">modify</button>
                 </div>

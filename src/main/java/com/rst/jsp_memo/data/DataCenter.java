@@ -28,28 +28,14 @@ public class DataCenter {
 		return password;
 	}
 	
-	public static long getNewMemoId() throws ReadWriteException {
+	/**
+	 * 현재존재하는 마지막 메모의 아이디.
+	 */
+	public static long getLastMemoId() throws ReadWriteException {
 		long id;
 		String last_num = RawData.readFile( getRealPath( "last_memo_num" ) );
-		id = Long.parseLong(last_num)+1;
+		id = Long.parseLong(last_num);
 		return id;
-	}
-
-	/**
-	 * 
-	 * @param tags_text: 탭으로 태그들이 구분된 태그목록
-	 * @return 각 태그를 하나의 원소로 하는 리스트를 반환
-	 */
-	private static LinkedList<String> getTagsFromText(String tags_text){
-		StringTokenizer tags = new StringTokenizer(tags_text);
-
-		LinkedList<String> tag_list = new LinkedList<String>();
-
-		while(tags.hasMoreTokens()){
-			tag_list.add( tags.nextToken() );
-		}
-
-		return tag_list;
 	}
 
 	/**
@@ -58,9 +44,16 @@ public class DataCenter {
 	 */
 	public static LinkedList<String> getAllTags() throws ReadWriteException {
 		String tags_file = RawData.readFile( getRealPath(TAGS_FILE_PATH) );
-		LinkedList<String> list = getTagsFromText(tags_file);
+		
+		StringTokenizer tags = new StringTokenizer(tags_file);
 
-		return list;
+		LinkedList<String> tag_list = new LinkedList<String>();
+
+		while(tags.hasMoreTokens()){
+			tag_list.add( tags.nextToken() );
+		}
+
+		return tag_list;
 	}
 
 	/**
@@ -78,29 +71,34 @@ public class DataCenter {
 	 */
 	public static Memo getMemo(long memoId) throws ReadWriteException{
 		Memo memo;
-		if(MemoRepository.isContain(memoId)){
-			memo = MemoRepository.getMemo(memoId);
-		}else{
-			String memoText = RawData.readFile(getRealPath("memo/"+memoId));
+		
+		String memoText = RawData.readFile(getRealPath("memo/"+memoId));
 
-			Scanner scan = new Scanner(memoText);
+		Scanner scan = new Scanner(memoText);
 	
-			String[] splited = scan.nextLine().split("\t");
-			LinkedList<String> tags = getTagsFromText(splited[1]);
-
-			splited = scan.nextLine().split("\t");
-			String title = splited[1];
-			String contents = "";
-
-			while(scan.hasNextLine()){
-				contents += scan.nextLine()+'\n';
-			}
-			//마지막 \n제거
-			contents = contents.substring(0, contents.length() - 1);
-			memo = Memo.createMemo(tags, title, contents);
-
-			scan.close();
+		//태그들 저장
+		StringTokenizer st = new StringTokenizer(scan.nextLine());
+		LinkedList<String> tags = new LinkedList<String>();
+		st.nextToken();
+		while(st.hasMoreTokens()){
+			tags.add(st.nextToken());
 		}
+
+		//제목 저장
+		st = new StringTokenizer(scan.nextLine());
+		st.nextToken();
+		String title = st.nextToken();
+		String contents = "";
+
+		while(scan.hasNextLine()){
+			contents += scan.nextLine()+'\n';
+		}
+
+		//마지막 \n제거
+		contents = contents.substring(0, contents.length() - 1);
+		memo = Memo.createMemo(memoId, tags, title, contents);
+
+		scan.close();
 		
 		return memo;
 	}
@@ -142,18 +140,31 @@ public class DataCenter {
 
 	/**
 	 * 
-	 * 애플리케이션에서 관리될 새로운 메모를 만든다.
-	 * 따라서 MemoRepository에도 등록되어 관리된다.
+	 * 메모를 파일에 기록한다.
 	 * 
 	 * @param tags
 	 * @param title
 	 * @param contents
 	 * @return 생성된 메모객체 오류 발생시 null
 	 */
-	public static Memo createMemo(LinkedList<String> tags, String title, String contents) throws ReadWriteException{
-		Memo m = Memo.createMemo(tags, title, contents);
+	public static Memo createMemo(long memoId, LinkedList<String> tags, String title, String contents) throws ReadWriteException{
+		Memo m = Memo.createMemo(memoId, tags, title, contents);
 		if(m != null){ 
-			MemoRepository.putMemo(m);
+			writeMemoOnFile(m);
+
+			Iterator<String> tagit = tags.iterator();
+			while(tagit.hasNext()){
+				String tag = tagit.next();
+				
+				try{//먼저 태그가 존재하는지 찾아야함!
+					String memosInTag = RawData.readFile( getRealPath("tags/"+tag) );
+				}catch(ReadWriteException e){
+					//태그가 존재하지 않는다면
+					if(e.error_code == ReadWriteException.FILE_NOT_FOUND){
+
+					}
+				}
+			}
 		}
 		return m;
 	}
@@ -165,7 +176,6 @@ public class DataCenter {
 	 */
 	public static void deleteMemo(long memo_id) throws ReadWriteException{
 
-		MemoRepository.removeMemo(memo_id);
 		String path = getRealPath("memo/"+memo_id);
 		RawData.deleteFile(path);
 	}
@@ -173,7 +183,6 @@ public class DataCenter {
 
 	/**
 	 * 파라미터로 주어진 메모 m을 로컬파일로 저장한다.
-	 * memo repository에서 변경사항을 저장할때 이용할 예정.(saveChanges메소드에서)
 	 * @param Memo m
 	 */
 	protected static void writeMemoOnFile(Memo m) throws ReadWriteException{

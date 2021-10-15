@@ -53,7 +53,35 @@ public class MemosByTag extends HttpServlet{
 
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    /**
+     * 메모를 수정하거나 새로만드는 작업을 진행한다.
+     * 
+     */
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
+        /**
+         * path는 /tag/***
+         * 같은 형식으로 들어오게된다.
+         */
+        //String path = req.getRequestURI().toString();
+        /*
+        Enumeration<String> tags = req.getParameterNames();
+        while( tags.hasMoreElements() ){
+            System.out.println(tags.nextElement());
+        }*/
+        Long memoId = Long.parseLong(req.getParameter("memoId"));
+        String title = req.getParameter("title");
+        String contents = req.getParameter("contents");
+        String[] tagArr = req.getParameterValues("tags[]");
+        LinkedList<String> tags = new LinkedList<String>();
+        for( String t : tagArr ){
+            tags.add(t);
+        }
 
+        try{
+            DataCenter.createMemo(memoId, tags, title, contents);
+        }catch(ReadWriteException e){
+            e.printStackTrace();
+        }
+        
     }
 }

@@ -71,6 +71,9 @@ body{
 .memo{
     display: inline-block;
     padding: 0.5em;
+    min-width: 15em;
+    min-height: 8em;
+
     border-radius: 0.5em;
     box-shadow: 0 0 0 1px gray;
 
@@ -85,4 +88,7 @@ body{
     display: block;
     border: none;
     overflow: visible;
+}
+.memoModify {
+    margin-bottom: 0.2em;
 }
