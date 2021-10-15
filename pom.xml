@@ -55,6 +55,7 @@
     			<artifactId>jetty-maven-plugin</artifactId>
     			<version>9.4.7.RC0</version>
 					<configuration>
+            <scanIntervalSeconds>5</scanIntervalSeconds>
 					</configuration>
         </plugin>
         <plugin>
