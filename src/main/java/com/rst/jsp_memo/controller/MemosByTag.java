@@ -61,14 +61,11 @@ public class MemosByTag extends HttpServlet{
         /**
          * path는 /tag/***
          * 같은 형식으로 들어오게된다.
+         * type이 create이면 새로운 메모를 만드는 요청.
+         * modify 이면 기존 메모를 수정하는 요청( 메모아이디가 파라미터로 옴)
          */
-        //String path = req.getRequestURI().toString();
-        /*
-        Enumeration<String> tags = req.getParameterNames();
-        while( tags.hasMoreElements() ){
-            System.out.println(tags.nextElement());
-        }*/
-        Long memoId = Long.parseLong(req.getParameter("memoId"));
+        String reqType = req.getRequestURI().toString().substring(5);
+       
         String title = req.getParameter("title");
         String contents = req.getParameter("contents");
         String[] tagArr = req.getParameterValues("tags[]");
@@ -77,11 +74,37 @@ public class MemosByTag extends HttpServlet{
             tags.add(t);
         }
 
+        if(reqType.equals("create")){
+            createNewMemo(title, contents, tagArr);
+        }else if(reqType.equals("modify")){
+            Long memoId = Long.parseLong(req.getParameter("memoId"));
+            modifyMemo(memoId, title, contents, tagArr);
+        } else{
+            System.out.println("wrong req: "+reqType);
+        }
+        
+    }
+
+    private void createNewMemo(String title, String contents, String[] tagArr){
         try{
+            long memoId = DataCenter.getLastMemoId() + 1;
+            LinkedList<String> tags = new LinkedList<String>();
+            for( String str : tagArr ) tags.add(str);
+
             DataCenter.createMemo(memoId, tags, title, contents);
         }catch(ReadWriteException e){
             e.printStackTrace();
         }
-        
+    }
+
+    private void modifyMemo(Long memoId, String title, String contents, String[] tagArr){
+        try{
+            LinkedList<String> tags = new LinkedList<String>();
+            for( String str : tagArr ) tags.add(str);
+            
+            DataCenter.createMemo(memoId, tags, title, contents);
+        }catch(ReadWriteException e){
+            e.printStackTrace();
+        }
     }
 }

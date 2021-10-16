@@ -45,6 +45,7 @@
         <section class="sec1">
             <div class="newMemo">
                 <div contenteditable="true" id="NewMemoTitle"></div>
+                <div contenteditable="true" id="NewMemoTags"></div>
                 <div contenteditable="true" id="NewMemoContent"></div>
                 <button id="NewMemoSave">save</button>
             </div>

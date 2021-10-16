@@ -1,8 +1,6 @@
 package com.rst.jsp_memo.data;
 
-import java.util.StringTokenizer;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 /**
 This is static factory class about meta data.
 
@@ -189,7 +187,7 @@ public class DataCenter {
 		LinkedList<String> memo_tags = m.getTagList();
 		String file_path = getRealPath("memo/"+m.getMemoId());
 		
-		String file_tags = "tags:\t";
+		String file_tags = "tags:";
 		while( !memo_tags.isEmpty() ){
 			file_tags += '\t'+memo_tags.pop();
 		}

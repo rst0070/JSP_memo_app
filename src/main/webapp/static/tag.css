@@ -49,7 +49,15 @@ body{
     margin-right: auto;
     width: 90%;
 }
-
+#NewMemoTags::before{
+    content: "type tags..";
+    size: 0.8em;
+}
+#NewMemoTags {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
 #NewMemoContent::before{
     content: "type memo..";
     size: 0.8em;
