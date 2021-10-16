@@ -147,21 +147,31 @@ public class DataCenter {
 	 */
 	public static Memo createMemo(long memoId, LinkedList<String> tags, String title, String contents) throws ReadWriteException{
 		Memo m = Memo.createMemo(memoId, tags, title, contents);
-		if(m != null){ 
-			writeMemoOnFile(m);
+		if(m == null) return null;
+			
+		long last_num = getLastMemoId();
+		
+		if( m.getMemoId() > last_num ){
+			RawData.writeFile(getRealPath("last_memo_num"), ""+m.getMemoId());
+			
+		}
+		
+		writeMemoOnFile(m);
+		LinkedList<String> allTags = getAllTags();
+		Iterator<String> tagit = tags.iterator();
+		while(tagit.hasNext()){
+			String tag = tagit.next();
 
-			Iterator<String> tagit = tags.iterator();
-			while(tagit.hasNext()){
-				String tag = tagit.next();
-				
-				try{//먼저 태그가 존재하는지 찾아야함!
-					String memosInTag = RawData.readFile( getRealPath("tags/"+tag) );
-				}catch(ReadWriteException e){
-					//태그가 존재하지 않는다면
-					if(e.error_code == ReadWriteException.FILE_NOT_FOUND){
+			if(allTags.contains(tag)){
 
-					}
-				}
+				String memosInTag = RawData.readFile(getRealPath("tags/"+tag));
+				RawData.writeFile(getRealPath("tags/"+tag), memosInTag + '\t' + m.getMemoId());
+			}else{
+				allTags.add(tag);
+				String textForTags = "";
+				Iterator<String> it = allTags.iterator();
+				while(it.hasNext()) textForTags += '\t' + tag;
+
 			}
 		}
 		return m;
@@ -189,7 +199,8 @@ public class DataCenter {
 		
 		String file_tags = "tags:";
 		while( !memo_tags.isEmpty() ){
-			file_tags += '\t'+memo_tags.pop();
+			String t = memo_tags.pop();
+			if( !t.equals("\t") )	file_tags += '\t'+t;
 		}
 
 		String file_title = "title:\t"+m.getTitle();

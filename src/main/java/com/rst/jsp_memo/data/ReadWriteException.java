@@ -34,4 +34,22 @@ public class ReadWriteException extends Exception{
         super(msg);
         this.error_code = error_code;
     }
+
+    @Override
+    public String getMessage(){
+        String result = "ReadWriteException: ";
+        switch(error_code){
+            case FILE_NOT_FOUND:
+            result += "file not found";break;
+            case NOT_FILE:
+            result += "It is not file";break;
+            case IO_DENIED:
+            result += "cant io";break;
+            case SECURITY_BLOCKED:
+            result += "security problem";break;
+            default:
+            result += "What the ..";break;
+        }
+        return result;
+    }
 }

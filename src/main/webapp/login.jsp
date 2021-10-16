@@ -7,7 +7,7 @@
 <body>
 	<form id="login-box" action="/login" method="POST">
 		<h1>JSP Memo Application</h1>
-		<input type="password" name="pw" placeholder="password"/>
+		<input type="password" name="pw" placeholder="password"/><br/>
 		<input type="submit" value="login"/>
 	</form>
 </body>

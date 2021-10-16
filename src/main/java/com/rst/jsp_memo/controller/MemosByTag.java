@@ -65,7 +65,8 @@ public class MemosByTag extends HttpServlet{
          * modify 이면 기존 메모를 수정하는 요청( 메모아이디가 파라미터로 옴)
          */
         String reqType = req.getRequestURI().toString().substring(5);
-       
+        System.out.println(reqType);
+        
         String title = req.getParameter("title");
         String contents = req.getParameter("contents");
         String[] tagArr = req.getParameterValues("tags[]");
@@ -86,6 +87,7 @@ public class MemosByTag extends HttpServlet{
     }
 
     private void createNewMemo(String title, String contents, String[] tagArr){
+        System.out.println("request: create memo.");
         try{
             long memoId = DataCenter.getLastMemoId() + 1;
             LinkedList<String> tags = new LinkedList<String>();
@@ -93,18 +95,19 @@ public class MemosByTag extends HttpServlet{
 
             DataCenter.createMemo(memoId, tags, title, contents);
         }catch(ReadWriteException e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
     private void modifyMemo(Long memoId, String title, String contents, String[] tagArr){
+        System.out.println("request: modify memo.");
         try{
             LinkedList<String> tags = new LinkedList<String>();
             for( String str : tagArr ) tags.add(str);
             
             DataCenter.createMemo(memoId, tags, title, contents);
         }catch(ReadWriteException e){
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }
