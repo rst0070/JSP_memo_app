@@ -15,6 +15,8 @@ function modifyMemo(memoId){
 
     let tags = tagText.split('#');
 
+    console.log(title+'\n'+content+'\n'+tags);
+
     $.ajax({
         type: "POST",
         url: "/tag/modify",

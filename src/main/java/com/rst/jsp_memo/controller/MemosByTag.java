@@ -10,7 +10,10 @@ public class MemosByTag extends HttpServlet{
     static final long SerialVersionUID = 1L;
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        String sessionId = request.getSession().getId();
+        HttpSession session = request.getSession();
+
+        session.setAttribute("visitedController", "true");
+        String sessionId = session.getId();
 
         //사용자가 요청한 태그명을 가져온다. 오류시 기본태그명사용
         String tag = request.getPathInfo();
@@ -70,10 +73,15 @@ public class MemosByTag extends HttpServlet{
         String title = req.getParameter("title");
         String contents = req.getParameter("contents");
         String[] tagArr = req.getParameterValues("tags[]");
+        String tagsText = "";
         LinkedList<String> tags = new LinkedList<String>();
+        
         for( String t : tagArr ){
-            tags.add(t);
+            tagsText += t;
         }
+
+        StringTokenizer st = new StringTokenizer(tagsText);
+        while(st.hasMoreTokens()) tags.add(st.nextToken());
 
         if(reqType.equals("create")){
             createNewMemo(title, contents, tagArr);

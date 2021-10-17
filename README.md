@@ -1,10 +1,10 @@
 # JSP Memo Application
-텍스트 파일 입출력을 이용한 Memo Application
+SQLite를 이용한 메모 애플리케이션
 
 # 데이터관리는 어떻게 하는가?
-1. 데이터 리소스는 특정폴더에 지정을 한다. /data
-2. 데이터에 직접접근하는 유일한 메소드들을 모아두었다.(static factory) `com.rst.jsp_memo.data.RawData`
-3. 애플리케이션 내부에서 데이터에 접근하거나 수정하는 동작이 하나의 클래스를 통해서만 
+[SQLite online](https://sqliteonline.com/)  
+1. 데이터 리소스는 sqlite를 이용한다.(text 파일을 이용하니 io에서 신경 쓸 부분이 너무 많음)
+2. 애플리케이션 내부에서 데이터에 접근하거나 수정하는 동작이 하나의 클래스를 통해서만 
 이루어지도록 구현했다.(static factory) `com.rst.jsp_memo.data.DataCenter`
 
 # MVC모델 구현방법

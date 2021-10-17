@@ -2,9 +2,23 @@
 <%@ page import = "com.rst.jsp_memo.model.*" %>
 <%@ page import = "com.rst.jsp_memo.data.Memo" %>
 <%@ page import = "java.util.*" %>
+<%@ page import = "javax.servlet.http.*" %>
 <%@ page import = "com.rst.jsp_memo.data.ReadWriteException" %>
 <%
-    String sessionId = request.getSession().getId();
+    /**
+     * 만약 사용자가 controller를 거치지 않고 바로 jsp를 요청했다면..
+     * 다시 controller로 redirect 해야한다.
+     */
+    String isVisitedController = session.getAttribute("visitedController").toString();
+    if( isVisitedController != null && isVisitedController.equals("true") ){
+        session.setAttribute("visitedController", "false");
+    }
+    else{
+        response.sendRedirect("/tag/memo");
+        return;
+    }
+
+    String sessionId = session.getId();
 
     Iterator<String> tagList;
     try{

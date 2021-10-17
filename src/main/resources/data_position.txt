@@ -1,1 +1,0 @@
-/workspace/JSP_memo_app/data

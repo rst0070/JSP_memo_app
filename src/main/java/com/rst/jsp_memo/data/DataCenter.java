@@ -83,9 +83,9 @@ public class DataCenter {
 		}
 
 		//제목 저장
-		st = new StringTokenizer(scan.nextLine());
-		st.nextToken();
-		String title = st.nextToken();
+		String[] titleLine = scan.nextLine().split("\t", 2);
+		String title = titleLine[1];
+		
 		String contents = "";
 
 		while(scan.hasNextLine()){
@@ -140,6 +140,8 @@ public class DataCenter {
 	 * 
 	 * 메모를 파일에 기록한다.
 	 * 
+	 * 1. 메모파일 생성하기: (data/memo/<memoId>)
+	 * 2. 해당되는 태그에 메모 아이디 입력하기: (data/tags/<tagName>)
 	 * @param tags
 	 * @param title
 	 * @param contents
@@ -156,30 +158,39 @@ public class DataCenter {
 			
 		}
 		
+		//1. 메모파일에 작성하기
 		writeMemoOnFile(m);
+
+		//2. 태그파일에 메모작성하기
 		LinkedList<String> allTags = getAllTags();
 		Iterator<String> tagit = tags.iterator();
 		while(tagit.hasNext()){
 			String tag = tagit.next();
 
+			//해당 하는 태그가 이미 존재할 경우
 			if(allTags.contains(tag)){
 
 				String memosInTag = RawData.readFile(getRealPath("tags/"+tag));
-				RawData.writeFile(getRealPath("tags/"+tag), memosInTag + '\t' + m.getMemoId());
-			}else{
+				if( !memosInTag.contains(tag) )
+					RawData.writeFile(getRealPath("tags/"+tag), memosInTag + '\t' + m.getMemoId());
+			}else{// 해당하는 태그가 존재하지 않을때
 				allTags.add(tag);
-				String textForTags = "";
-				Iterator<String> it = allTags.iterator();
-				while(it.hasNext()) textForTags += '\t' + tag;
-
+				RawData.writeFile(getRealPath("tags/"+tag), m.getMemoId()+"");
 			}
 		}
+
+		//태그목록이 변경되었을 것 이므로 태그목록 파일에 변경사항대로 기록.
+		tagit = tags.iterator();
+		String textForTags = "";
+		while(tagit.hasNext()) textForTags += '\t' + tagit.next();
+		RawData.writeFile(getRealPath(TAGS_FILE_PATH), textForTags);
+
 		return m;
 	}
 
 
 	/**
-	 * memo_id를 가지는 메모를 메모 레퍼지토리, 로컬상에서 삭제한다.
+	 * memo_id를 가지는 메모를 로컬상에서 삭제한다.
 	 * @param long memo_id
 	 */
 	public static void deleteMemo(long memo_id) throws ReadWriteException{
@@ -199,10 +210,10 @@ public class DataCenter {
 		
 		String file_tags = "tags:";
 		while( !memo_tags.isEmpty() ){
-			String t = memo_tags.pop();
-			if( !t.equals("\t") )	file_tags += '\t'+t;
+			String tag = memo_tags.pop();
+			file_tags += '\t' + tag;
 		}
-
+		
 		String file_title = "title:\t"+m.getTitle();
 		String file_contents = m.getContents();
 
