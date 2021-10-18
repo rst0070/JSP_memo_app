@@ -22,7 +22,7 @@ public class DataCenter {
 	}
 	
 	public static String getLoginPassword() throws ReadWriteException{
-		String password = RawData.readFile( getRealPath( LOGIN_FILE_PATH ) );
+		String password = DataAccess.readFile( getRealPath( LOGIN_FILE_PATH ) );
 		return password;
 	}
 	
@@ -31,7 +31,7 @@ public class DataCenter {
 	 */
 	public static long getLastMemoId() throws ReadWriteException {
 		long id;
-		String last_num = RawData.readFile( getRealPath( "last_memo_num" ) );
+		String last_num = DataAccess.readFile( getRealPath( "last_memo_num" ) );
 		id = Long.parseLong(last_num);
 		return id;
 	}
@@ -41,7 +41,7 @@ public class DataCenter {
 	 * 이때 모든 태그를 담고있는 파일은 탭으로 태그들을 구분한다.
 	 */
 	public static LinkedList<String> getAllTags() throws ReadWriteException {
-		String tags_file = RawData.readFile( getRealPath(TAGS_FILE_PATH) );
+		String tags_file = DataAccess.readFile( getRealPath(TAGS_FILE_PATH) );
 		
 		StringTokenizer tags = new StringTokenizer(tags_file);
 
@@ -70,7 +70,7 @@ public class DataCenter {
 	public static Memo getMemo(long memoId) throws ReadWriteException{
 		Memo memo;
 		
-		String memoText = RawData.readFile(getRealPath("memo/"+memoId));
+		String memoText = DataAccess.readFile(getRealPath("memo/"+memoId));
 
 		Scanner scan = new Scanner(memoText);
 	
@@ -108,7 +108,7 @@ public class DataCenter {
 	 * @return LinkedList<Long> 메모들의 아이디가 Long값으로 들어있는 리스트
 	 */
 	private static LinkedList<Long> getMemoListByTag(String tag) throws ReadWriteException {
-		String file = RawData.readFile( getRealPath( "tags/"+tag ) );
+		String file = DataAccess.readFile( getRealPath( "tags/"+tag ) );
 		StringTokenizer memos = new StringTokenizer(file);
 
 		LinkedList<Long> memo_list = new LinkedList<Long>();
@@ -154,7 +154,7 @@ public class DataCenter {
 		long last_num = getLastMemoId();
 		
 		if( m.getMemoId() > last_num ){
-			RawData.writeFile(getRealPath("last_memo_num"), ""+m.getMemoId());
+			DataAccess.writeFile(getRealPath("last_memo_num"), ""+m.getMemoId());
 			
 		}
 		
@@ -170,12 +170,12 @@ public class DataCenter {
 			//해당 하는 태그가 이미 존재할 경우
 			if(allTags.contains(tag)){
 
-				String memosInTag = RawData.readFile(getRealPath("tags/"+tag));
+				String memosInTag = DataAccess.readFile(getRealPath("tags/"+tag));
 				if( !memosInTag.contains(tag) )
-					RawData.writeFile(getRealPath("tags/"+tag), memosInTag + '\t' + m.getMemoId());
+					DataAccess.writeFile(getRealPath("tags/"+tag), memosInTag + '\t' + m.getMemoId());
 			}else{// 해당하는 태그가 존재하지 않을때
 				allTags.add(tag);
-				RawData.writeFile(getRealPath("tags/"+tag), m.getMemoId()+"");
+				DataAccess.writeFile(getRealPath("tags/"+tag), m.getMemoId()+"");
 			}
 		}
 
@@ -183,7 +183,7 @@ public class DataCenter {
 		tagit = tags.iterator();
 		String textForTags = "";
 		while(tagit.hasNext()) textForTags += '\t' + tagit.next();
-		RawData.writeFile(getRealPath(TAGS_FILE_PATH), textForTags);
+		DataAccess.writeFile(getRealPath(TAGS_FILE_PATH), textForTags);
 
 		return m;
 	}
@@ -196,7 +196,7 @@ public class DataCenter {
 	public static void deleteMemo(long memo_id) throws ReadWriteException{
 
 		String path = getRealPath("memo/"+memo_id);
-		RawData.deleteFile(path);
+		DataAccess.deleteFile(path);
 	}
 
 
@@ -217,6 +217,6 @@ public class DataCenter {
 		String file_title = "title:\t"+m.getTitle();
 		String file_contents = m.getContents();
 
-		RawData.writeFile( file_path, file_tags+'\n'+file_title+'\n'+file_contents);
+		DataAccess.writeFile( file_path, file_tags+'\n'+file_title+'\n'+file_contents);
 	}
 }

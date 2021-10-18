@@ -7,7 +7,7 @@ This is static factory class
 aim to read text files.
 data 패키지 내부의 클래스에서만 접근가능
 */ 
-class RawData {
+class DataAccess {
 	private static Connection connection;
 	private static Statement statement;
 	private static ResultSet resultSet;
