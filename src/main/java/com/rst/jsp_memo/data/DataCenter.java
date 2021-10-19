@@ -118,16 +118,16 @@ public class DataCenter {
 
 	/**
 	 * 
-	 * 메모를 파일에 기록한다.
-	 * 
-	 * 1. 메모파일 생성하기: (data/memo/<memoId>)
-	 * 2. 해당되는 태그에 메모 아이디 입력하기: (data/tags/<tagName>)
+	 * 메모를 DB에 기록한다.
+	 * 1. 메모가 이미 존재하는지 확인
+	 * 2. 있다면 수정, 없다면 생성하기
 	 * @param tags
 	 * @param title
 	 * @param contents
 	 * @return 생성된 메모객체 오류 발생시 null
 	 */
 	public static void createMemo(long memoId, LinkedList<String> tags, String title, String contents) throws ReadWriteException{
+		ResultSet rs = DataAccess.execute("select id from MEMO where id = "+memoId);
 		
 
 	}
