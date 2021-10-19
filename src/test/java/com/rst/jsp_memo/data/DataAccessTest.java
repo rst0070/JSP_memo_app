@@ -16,7 +16,6 @@ public class DataAccessTest {
         try{
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:"+DB_FILE);
-            System.out.println(connection.getSchema());
             statement = connection.createStatement();
             
         }catch(ClassNotFoundException ce){
@@ -31,10 +30,14 @@ public class DataAccessTest {
     @Test
     public void selectTest(){
         try{
+            String result = "";
             resultSet = statement.executeQuery("select * from `MEMO`");
-            String result = resultSet.getNString("title");
-            System.out.println(result);
-            assertEquals("testpw", result);
+            while(resultSet.next()){
+                result = resultSet.getString("title");
+                System.out.println(result);
+                
+            }
+            assertEquals("test", result);
         }catch(Exception e){
             e.printStackTrace();
         }

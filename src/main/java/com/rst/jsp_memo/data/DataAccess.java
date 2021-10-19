@@ -14,23 +14,50 @@ class DataAccess {
 	private static final String DB_FILE = "jsp_memo.db";
 
 	static{
-		Connection con = null;
 		try {
 		// SQLite JDBC 체크
 		Class.forName("org.sqlite.JDBC");
 		
-		con = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
+		connection = DriverManager.getConnection("jdbc:sqlite:" + DB_FILE);
 		// SQL 수행
-		Statement stat = con.createStatement();
-		ResultSet rs = stat.executeQuery("SELECT * from METADATA");
-		while(rs.next()) {
-			String id = rs.getString("login_pw");
-			String name = rs.getString("last_memo_num");
-			System.out.println(id + " " + name); 
-		} 
-		}catch(Exception e) { e.printStackTrace(); }
-		finally { if(con != null) { try {con.close();}catch(Exception e) {} } }
+		statement = connection.createStatement();
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 
+	}
+
+	public static ResultSet execute(String query){
+		ResultSet rs = null;
+		try{
+			rs = statement.executeQuery(query);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+		
+		return rs;
+	}
+
+	static class MetaData{
+		final long LAST_MEMO_NUM;
+		final String LOGIN_PW;
+		public MetaData(long last_memo_num, String login_pw){
+			LAST_MEMO_NUM = last_memo_num;
+			LOGIN_PW = login_pw;
+		}
+	}
+
+	public static MetaData getMetaData(){
+		ResultSet rs = execute("select * from METADATA");
+		MetaData md = null;
+		try{
+			rs.next();
+			md = new MetaData( rs.getLong("last_memo_num"), rs.getString("login_pw"));
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return md;
 	}
 	/**
 	 * 파일의 절대경로를 입력하면 파일의 전체 내용을 반환한다.

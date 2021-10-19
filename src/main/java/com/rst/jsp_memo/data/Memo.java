@@ -21,7 +21,7 @@ public class Memo {
 	 * @contents: 메모의 내용
 	 * 올바르지 않은 입력을 주었을시 null 반환
 	 */
-	public static Memo createMemo(long memoId, LinkedList<String> tags, String title, String contents) throws ReadWriteException{
+	public static Memo createMemo(long memoId, LinkedList<String> tags, String title, String contents){
 		
 		Memo memo = null;
 
