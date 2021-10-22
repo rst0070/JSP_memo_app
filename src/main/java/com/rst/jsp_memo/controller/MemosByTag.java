@@ -20,15 +20,10 @@ public class MemosByTag extends HttpServlet{
         if(tag == null) tag = "/memo";
         tag = tag.substring(1);
 
-        try{
-            saveModelForTagPage(tag, sessionId);
-            response.sendRedirect("/tag.jsp");
+        saveModelForTagPage(tag, sessionId);
+        response.sendRedirect("/tag.jsp");
 
-        }catch(ReadWriteException e){
-            
-            BufferedWriter bw = new BufferedWriter(response.getWriter());
-            bw.write(e.getMessage());
-        }
+        
     }
 
     /**
@@ -36,7 +31,7 @@ public class MemosByTag extends HttpServlet{
      * @param tag - 태그명
      * @param sessionId - session id of request
      */
-    private void saveModelForTagPage(String tag, String sessionId) throws ReadWriteException{
+    private void saveModelForTagPage(String tag, String sessionId){
 
         LinkedList<String> tags = DataCenter.getAllTags();
         Iterator<String> it = tags.iterator();
@@ -96,26 +91,21 @@ public class MemosByTag extends HttpServlet{
 
     private void createNewMemo(String title, String contents, String[] tagArr){
         System.out.println("request: create memo.");
-        try{
+        
             long memoId = DataCenter.getLastMemoId() + 1;
             LinkedList<String> tags = new LinkedList<String>();
             for( String str : tagArr ) tags.add(str);
 
             DataCenter.createMemo(memoId, tags, title, contents);
-        }catch(ReadWriteException e){
-            System.out.println(e.getMessage());
-        }
+        
     }
 
     private void modifyMemo(Long memoId, String title, String contents, String[] tagArr){
         System.out.println("request: modify memo.");
-        try{
-            LinkedList<String> tags = new LinkedList<String>();
-            for( String str : tagArr ) tags.add(str);
+        
+        LinkedList<String> tags = new LinkedList<String>();
+        for( String str : tagArr ) tags.add(str);
             
-            DataCenter.createMemo(memoId, tags, title, contents);
-        }catch(ReadWriteException e){
-            System.out.println(e.getMessage());
-        }
+        DataCenter.createMemo(memoId, tags, title, contents);
     }
 }

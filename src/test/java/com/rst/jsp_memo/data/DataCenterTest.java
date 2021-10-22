@@ -8,13 +8,13 @@ import java.util.*;
 public class DataCenterTest {
    
     @Test
-    public void getAllTags() throws ReadWriteException{
+    public void getAllTags(){
         LinkedList<String> tags = DataCenter.getAllTags();
         assertThat(tags.pop()).isEqualTo("memo");
     }
 
     @Test
-    public void getMemo() throws ReadWriteException{
+    public void getMemo(){
         long memoId = 1;
 
         Memo m = DataCenter.getMemo(memoId);

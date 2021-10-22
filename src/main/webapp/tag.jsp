@@ -3,7 +3,6 @@
 <%@ page import = "com.rst.jsp_memo.data.Memo" %>
 <%@ page import = "java.util.*" %>
 <%@ page import = "javax.servlet.http.*" %>
-<%@ page import = "com.rst.jsp_memo.data.ReadWriteException" %>
 <%
     /**
      * 만약 사용자가 controller를 거치지 않고 바로 jsp를 요청했다면..
@@ -20,15 +19,7 @@
 
     String sessionId = session.getId();
 
-    Iterator<String> tagList;
-    try{
-        tagList = Repository.getAllTags().iterator();
-    }catch(ReadWriteException e){
-        LinkedList<String> tmpList = new LinkedList<String>();
-        tmpList.add(e.getMessage());
-        tagList = tmpList.iterator();
-    }
-    
+    Iterator<String> tagList = Repository.getAllTags().iterator();
 
     TagDataModel model = (TagDataModel)Repository.get(sessionId);
     

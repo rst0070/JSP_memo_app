@@ -12,7 +12,7 @@ This is static factory class about meta data.
 public class DataCenter {
 	
 
-	public static String getLoginPassword() throws ReadWriteException{
+	public static String getLoginPassword(){
 		DataAccess.MetaData md = DataAccess.getMetaData();
 		return md.LOGIN_PW;
 	}
@@ -20,7 +20,7 @@ public class DataCenter {
 	/**
 	 * 현재존재하는 마지막 메모의 아이디.
 	 */
-	public static long getLastMemoId() throws ReadWriteException {
+	public static long getLastMemoId(){
 		DataAccess.MetaData md = DataAccess.getMetaData();
 		return md.LAST_MEMO_NUM;
 	}
@@ -86,7 +86,7 @@ public class DataCenter {
 	 * @param tag 찾을 메모들의 공통아이디
 	 * @return LinkedList<Long> 메모들의 아이디가 Long값으로 들어있는 리스트
 	 */
-	private static LinkedList<Long> getMemoListByTag(String tag) throws ReadWriteException {
+	private static LinkedList<Long> getMemoListByTag(String tag){
 
 		LinkedList<Long> list = new LinkedList<Long>();
 		ResultSet rs = DataAccess.execute("select memos from TAG_INFO where name = '"+tag+"'");
@@ -106,7 +106,7 @@ public class DataCenter {
 	 * @param tag 태그명
 	 * @return LinkedList<Memo> 해당 메모들
 	 */
-	public static LinkedList<Memo> getMemosByTag(String tag) throws ReadWriteException {
+	public static LinkedList<Memo> getMemosByTag(String tag){
 		LinkedList<Long> ids = getMemoListByTag(tag);
 		LinkedList<Memo> memo_list = new LinkedList<Memo>();
 		while(!ids.isEmpty()){
@@ -126,8 +126,48 @@ public class DataCenter {
 	 * @param contents
 	 * @return 생성된 메모객체 오류 발생시 null
 	 */
-	public static void createMemo(long memoId, LinkedList<String> tags, String title, String contents) throws ReadWriteException{
+	public static void createMemo(long memoId, LinkedList<String> tags, String title, String contents){
 		ResultSet rs = DataAccess.execute("select id from MEMO where id = "+memoId);
+
+		Iterator<String> tagIt = tags.iterator();
+		String tagText = "";
+		while(tagIt.hasNext())
+			tagText += '#'+tagIt.next();
+		
+		try{
+			PreparedStatement ps;
+			if(rs.next() == false){//해당하는 아이디를 가진 메모가 없을 경우
+				//메모 새로 입력
+				String sql = "insert into MEMO(id, title, tags, content) "+
+				"values(?, ?, ?, ?)";
+				ps = DataAccess.getPreparedStatement(sql);
+				ps.setLong(1, memoId);
+				ps.setString(2, title);
+				ps.setString(3, tagText);
+				ps.setString(4, contents);
+
+				//update last_memo_id
+				Statement st = DataAccess.getStatement();
+				boolean result = st.execute("update METADATA set last_memo_num = "+memoId+" where row_num = 1");
+				if(result) System.out.println("update metadata complite");
+				else System.out.println("update metadata failed");
+			}else{
+				String sql = "update MEMO"+
+				"set title = ?, tags = ?, content = ? "+
+				"where id = ?";
+				ps = DataAccess.getPreparedStatement(sql);
+				ps.setString(1, title);
+				ps.setString(2, tagText);
+				ps.setString(3, contents);
+				ps.setLong(4, memoId);
+			}
+
+			boolean result = ps.execute();
+			if(result) System.out.println("create memo complite");
+			else System.out.println("create memo failed");
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
 		
 
 	}
@@ -137,10 +177,17 @@ public class DataCenter {
 	 * memo_id를 가지는 메모를 로컬상에서 삭제한다.
 	 * @param long memo_id
 	 */
-	public static void deleteMemo(long memo_id) throws ReadWriteException{
+	public static void deleteMemo(long memo_id){
+		Statement st = DataAccess.getStatement();
+		boolean result = false;
+		try{
+			result = st.execute("delete from MEMO where id = "+memo_id);
+		}catch(SQLException se){
+			se.printStackTrace();
+		}
 
-		String path = getRealPath("memo/"+memo_id);
-		DataAccess.deleteFile(path);
+		if(result) System.out.println("delete success");
+		else System.out.println("delete failed");
 	}
 
 

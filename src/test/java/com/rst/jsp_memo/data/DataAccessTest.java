@@ -31,13 +31,8 @@ public class DataAccessTest {
     public void selectTest(){
         try{
             String result = "";
-            resultSet = statement.executeQuery("select * from `MEMO`");
-            while(resultSet.next()){
-                result = resultSet.getString("title");
-                System.out.println(result);
-                
-            }
-            assertEquals("test", result);
+            resultSet = statement.executeQuery("select * from `MEMO` where id = 2");
+            System.out.println(resultSet == null);
         }catch(Exception e){
             e.printStackTrace();
         }
