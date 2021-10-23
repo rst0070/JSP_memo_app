@@ -25,7 +25,7 @@ public class TagAccess implements DataAccess<Tag>{
         Tag tag = null;
         try{
             Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("select * from TAG where name = '"+name+"'");
+            ResultSet rs = st.executeQuery("select * from TAG where name = '"+name+"' ");
 
             rs.next();
 
@@ -45,6 +45,23 @@ public class TagAccess implements DataAccess<Tag>{
         }
 
         return tag;
+    }
+
+    @Override
+    public boolean isEntityExist(String tagName){
+        boolean isExist = true;
+        try{
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery("select name from TAG where name = '"+tagName+"' ");
+
+            isExist = rs.next();
+            rs.close();
+            st.close();
+        }catch(SQLException se){
+            se.printStackTrace();
+            isExist = false;
+        }
+        return isExist;
     }
 
     @Override
@@ -98,15 +115,13 @@ public class TagAccess implements DataAccess<Tag>{
      * delete entity where t.name == TAG.name
      */
     @Override
-    public void deleteEntity(Tag t){
-        if(!t.checkValidation()){System.out.println("cannot insert tag: it's not valid tag"); return;}
+    public void deleteEntity(String name){
 
-        String tagName = t.getName();
         try{
             String sql = "delete from TAG where name = '?' ";
             PreparedStatement ps = connection.prepareStatement(sql);
 
-            ps.setString(1, tagName);
+            ps.setString(1, name);
             
             ps.executeQuery();
             ps.close();

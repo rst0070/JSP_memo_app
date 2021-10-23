@@ -7,8 +7,9 @@ data 패키지 내부의 클래스에서만 접근가능
 */ 
 public interface DataAccess<E extends Entity> {
 
+	public boolean isEntityExist(String key);
 	public void insertEntity(E e);
 	public void updateEntity(E e);
-	public void deleteEntity(E e);
+	public void deleteEntity(String key);
 
 }

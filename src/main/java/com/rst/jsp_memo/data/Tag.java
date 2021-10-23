@@ -6,7 +6,8 @@ public class Tag implements Entity{
     private LinkedList<String> memoList = null;
 
     /**
-     * 해당 태그의 유효성 검사.
+     * check this tag is valid
+     * 1. all thing is not null value
      */
     @Override
     public boolean checkValidation(){

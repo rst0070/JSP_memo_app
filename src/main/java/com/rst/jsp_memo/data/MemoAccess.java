@@ -48,6 +48,29 @@ public class MemoAccess implements DataAccess<Memo>{
 
         return memo;
     }
+
+    /**
+     * @param id - id of memo looking for.
+     * @return true: The memo exists, false: The memo does not exist
+     */
+    @Override
+    public boolean isEntityExist(String id){
+        boolean exist = true;
+        try{
+            String sql = "select id from MEMO where id = '?' ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, id);
+
+            ResultSet rs = ps.executeQuery();
+
+            exist = rs.next();
+        }catch(SQLException se){
+            se.printStackTrace();
+            exist = false;
+        }
+        return exist;
+    }
+
     @Override
     public void insertEntity(Memo m){
         if(!m.checkValidation()) return;
@@ -89,14 +112,14 @@ public class MemoAccess implements DataAccess<Memo>{
     }
 
     @Override
-    public void deleteEntity(Memo m){
-        if(!m.checkValidation()) return;
+    public void deleteEntity(String id){
+
         String sql =
         "delete from MEMO where id = '?' ";
 
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, m.getId());
+            ps.setString(1, id);
             ps.execute();
             ps.close();
         }catch(SQLException se){

@@ -6,5 +6,9 @@ package com.rst.jsp_memo.data;
  */
 public interface Entity {
     
+    /**
+     * all get methods in Entity run this method for checking validation.<br/>
+     * @return true: this Entity is valid. false: this Entity is not valid.
+     */
     public boolean checkValidation();
 }
