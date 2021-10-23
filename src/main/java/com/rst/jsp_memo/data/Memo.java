@@ -1,50 +1,36 @@
 package com.rst.jsp_memo.data;
 import java.util.LinkedList;
 
-public class Memo {
+public class Memo implements Entity{
 	
-	private long MEMO_ID;
-	private LinkedList<String> tags;
-	private String title;
-	private String contents;
+	private String id = null;
+	private LinkedList<String> tagList = null;
+	private String title = null;
+	private String content = null;
 
-	private Memo(LinkedList<String> tags, String title, String contents, long memo_id){
-		MEMO_ID = memo_id;
-		this.tags = tags;
-		this.title = title;
-		this.contents = contents;
+	@Override
+	public boolean checkValidation(){
+		boolean result = true;
+		if(id == null) result = false;
+		if(title == null) result = false;
+		if(content == null) result = false;
+		if(tagList == null) result = false;
+
+		return result;
 	}
-
-	/**
-	 * @tags: 태그 리스트
-	 * @title: 메모의 제목
-	 * @contents: 메모의 내용
-	 * 올바르지 않은 입력을 주었을시 null 반환
-	 */
-	public static Memo createMemo(long memoId, LinkedList<String> tags, String title, String contents){
-		
-		Memo memo = null;
-
-		if(title.length() != 0 && contents.length() != 0){
-			memo = new Memo(tags, title, contents, memoId);
-		}
-		
-		return memo;
-	}
-
-	public long getMemoId(){return this.MEMO_ID;}
+	public String getId(){return this.id;}
 
 	public String getTitle(){return new String(this.title);}
 
-	public String getContents(){return new String(this.contents);}
+	public String getContent(){return new String(this.content);}
 
 	public LinkedList<String> getTagList(){
-		return (LinkedList<String>)(this.tags).clone();
+		return (LinkedList<String>)(this.tagList).clone();
 	}
 
-	public void setMemoId(long id){	this.MEMO_ID = id;}
+	public void setId(String id){ this.id = id;}
 
-	public void setContents(String contents){	this.contents = contents;}
+	public void setContent(String content){	this.content = content;}
 
-	public void setTagList(LinkedList<String> list){	this.tags = list;}
+	public void setTagList(LinkedList<String> list){	this.tagList = list;}
 }
