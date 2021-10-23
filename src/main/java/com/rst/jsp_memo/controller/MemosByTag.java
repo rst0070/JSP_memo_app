@@ -8,6 +8,8 @@ import com.rst.jsp_memo.model.*;
 
 public class MemosByTag extends HttpServlet{
     static final long SerialVersionUID = 1L;
+    private TagAccess tagAccess = TagAccess.getAccess();
+    private MemoAccess memoAccess = MemoAccess.getAccess();
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         HttpSession session = request.getSession();
@@ -33,20 +35,14 @@ public class MemosByTag extends HttpServlet{
      */
     private void saveModelForTagPage(String tag, String sessionId){
 
-        LinkedList<String> tags = DataCenter.getAllTags();
-        Iterator<String> it = tags.iterator();
+        Tag tagObj = tagAccess.selectEntity(tag);
+        Iterator<String> it = tagObj.getMemoList().iterator();
+        LinkedList<Memo> memoList = new LinkedList<Memo>();
 
-        boolean thereIsTag = false;
-        while(it.hasNext()){
-            if( it.next().equals(tag) ){thereIsTag = true; break;}
-        }
+        while(it.hasNext())
+            memoList.add( memoAccess.selectEntity( it.next() ) );
 
-        LinkedList<Memo> memos = null;
-        if(thereIsTag){
-            memos = DataCenter.getMemosByTag( tag );
-        }else{ memos = DataCenter.getMemosByTag( "memo" );}
-
-        TagDataModel model = new TagDataModel(tag, memos);
+        TagDataModel model = new TagDataModel(tag, memoList);
         Repository.put(sessionId, model);
 
     }
@@ -56,56 +52,7 @@ public class MemosByTag extends HttpServlet{
      * 
      */
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
-        /**
-         * path는 /tag/***
-         * 같은 형식으로 들어오게된다.
-         * type이 create이면 새로운 메모를 만드는 요청.
-         * modify 이면 기존 메모를 수정하는 요청( 메모아이디가 파라미터로 옴)
-         */
-        String reqType = req.getRequestURI().toString().substring(5);
-        System.out.println(reqType);
-        
-        String title = req.getParameter("title");
-        String contents = req.getParameter("contents");
-        String[] tagArr = req.getParameterValues("tags[]");
-        String tagsText = "";
-        LinkedList<String> tags = new LinkedList<String>();
-        
-        for( String t : tagArr ){
-            tagsText += t;
-        }
-
-        StringTokenizer st = new StringTokenizer(tagsText);
-        while(st.hasMoreTokens()) tags.add(st.nextToken());
-
-        if(reqType.equals("create")){
-            createNewMemo(title, contents, tagArr);
-        }else if(reqType.equals("modify")){
-            Long memoId = Long.parseLong(req.getParameter("memoId"));
-            modifyMemo(memoId, title, contents, tagArr);
-        } else{
-            System.out.println("wrong req: "+reqType);
-        }
         
     }
 
-    private void createNewMemo(String title, String contents, String[] tagArr){
-        System.out.println("request: create memo.");
-        
-            long memoId = DataCenter.getLastMemoId() + 1;
-            LinkedList<String> tags = new LinkedList<String>();
-            for( String str : tagArr ) tags.add(str);
-
-            DataCenter.createMemo(memoId, tags, title, contents);
-        
-    }
-
-    private void modifyMemo(Long memoId, String title, String contents, String[] tagArr){
-        System.out.println("request: modify memo.");
-        
-        LinkedList<String> tags = new LinkedList<String>();
-        for( String str : tagArr ) tags.add(str);
-            
-        DataCenter.createMemo(memoId, tags, title, contents);
-    }
 }

@@ -16,13 +16,34 @@ public class TagAccess implements DataAccess<Tag>{
         return access;
     }
 
-    /**
+
+    @Override
+    public boolean isEntityExist(String tagName){
+        boolean isExist = true;
+        try{
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery("select name from TAG where name = '"+tagName+"' ");
+
+            isExist = rs.next();
+            rs.close();
+            st.close();
+        }catch(SQLException se){
+            se.printStackTrace();
+            isExist = false;
+        }
+        return isExist;
+    }
+
+        /**
      * returns Tag obj by it's name.
      * @param name - name of tag
      * @return Tag, 존재하지 않거나 오류발생시 null 리턴.
      */
-    public Tag getByName(String name){
+    @Override
+    public Tag selectEntity(String name){
         Tag tag = null;
+        if(!isEntityExist(name)) return tag;
+        
         try{
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery("select * from TAG where name = '"+name+"' ");
@@ -47,22 +68,6 @@ public class TagAccess implements DataAccess<Tag>{
         return tag;
     }
 
-    @Override
-    public boolean isEntityExist(String tagName){
-        boolean isExist = true;
-        try{
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("select name from TAG where name = '"+tagName+"' ");
-
-            isExist = rs.next();
-            rs.close();
-            st.close();
-        }catch(SQLException se){
-            se.printStackTrace();
-            isExist = false;
-        }
-        return isExist;
-    }
 
     @Override
     public void insertEntity(Tag t){
@@ -78,7 +83,7 @@ public class TagAccess implements DataAccess<Tag>{
             ps.setString(1, tagName);
             ps.setString(2, memoListText);
 
-            ps.executeQuery();
+            ps.execute();
             ps.close();
         }catch(SQLException se){
             se.printStackTrace();
@@ -104,7 +109,7 @@ public class TagAccess implements DataAccess<Tag>{
             ps.setString(1, memoListText);
             ps.setString(2, tagName);
             
-            ps.executeQuery();
+            ps.execute();
             ps.close();
         }catch(SQLException se){
             se.printStackTrace();
@@ -123,7 +128,7 @@ public class TagAccess implements DataAccess<Tag>{
 
             ps.setString(1, name);
             
-            ps.executeQuery();
+            ps.execute();
             ps.close();
         }catch(SQLException se){
             se.printStackTrace();

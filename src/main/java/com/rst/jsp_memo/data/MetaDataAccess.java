@@ -13,8 +13,28 @@ public class MetaDataAccess implements DataAccess<MetaData>{
         return access;
     }
     
-    public MetaData getByName(String name){
+    
+
+    @Override
+    public boolean isEntityExist(String name){
+        boolean exist = false;
+        try{
+            PreparedStatement ps = connection.prepareStatement("select name from METADATA where name = '?' ");
+            ps.setString(1, name);
+
+            ResultSet rs = ps.executeQuery();
+            exist = rs.next();
+        }catch(SQLException se){
+            se.printStackTrace();
+        }
+        return exist;
+    }
+
+    @Override
+    public MetaData selectEntity(String name){
         MetaData data = null;
+        if(!isEntityExist(name)) return data;
+
         String sql =
         "select * from METADATA where name = '?' ";
         try{
@@ -34,22 +54,7 @@ public class MetaDataAccess implements DataAccess<MetaData>{
         }
         return data;
     }
-
-    @Override
-    public boolean isEntityExist(String name){
-        boolean exist = false;
-        try{
-            PreparedStatement ps = connection.prepareStatement("select name from METADATA where name = '?' ");
-            ps.setString(1, name);
-
-            ResultSet rs = ps.executeQuery();
-            exist = rs.next();
-        }catch(SQLException se){
-            se.printStackTrace();
-        }
-        return exist;
-    }
-
+    
     @Override
     public void insertEntity(MetaData m){
         if(!m.checkValidation()) return;

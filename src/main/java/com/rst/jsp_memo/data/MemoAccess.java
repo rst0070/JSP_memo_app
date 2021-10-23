@@ -18,36 +18,7 @@ public class MemoAccess implements DataAccess<Memo>{
         return access;
     }
 
-    /**
-     * 
-     * @param id : id of find.
-     * @return if wrong id or errors, returns null.
-     */
-    public Memo getById(String id){
-        Memo memo = null;
-        try{
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("select * from MEMO where id = '"+id+"'");
-
-            rs.next();
-
-            memo = new Memo();
-            memo.setId(rs.getString("id"));
-            
-            LinkedList<String> tagList = Util.tokenStringToList(rs.getString("tag_list"));
-            memo.setTagList(tagList);
-
-            memo.setContent(rs.getString("content"));
-
-            rs.close();
-            st.close();
-        }catch(SQLException se){
-            se.printStackTrace();
-            memo = null;
-        }
-
-        return memo;
-    }
+    
 
     /**
      * @param id - id of memo looking for.
@@ -69,6 +40,41 @@ public class MemoAccess implements DataAccess<Memo>{
             exist = false;
         }
         return exist;
+    }
+
+    /**
+     * 
+     * @param id : id of find.
+     * @return if wrong id or errors, returns null.
+     */
+    @Override
+    public Memo selectEntity(String id){
+        Memo memo = null;
+        if(!isEntityExist(id)) return memo;
+        
+        try{
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery("select * from MEMO where id = '"+id+"'");
+
+            rs.next();
+
+            memo = new Memo();
+            memo.setId(rs.getString("id"));
+            memo.setId(rs.getString("title"));
+
+            LinkedList<String> tagList = Util.tokenStringToList(rs.getString("tag_list"));
+            memo.setTagList(tagList);
+
+            memo.setContent(rs.getString("content"));
+
+            rs.close();
+            st.close();
+        }catch(SQLException se){
+            se.printStackTrace();
+            memo = null;
+        }
+
+        return memo;
     }
 
     @Override
@@ -106,6 +112,7 @@ public class MemoAccess implements DataAccess<Memo>{
             ps.setString(3, m.getContent());
             ps.execute();
             ps.close();
+
         }catch(SQLException se){
             se.printStackTrace();
         }
