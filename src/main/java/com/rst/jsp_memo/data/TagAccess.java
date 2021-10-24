@@ -44,9 +44,11 @@ public class TagAccess implements DataAccess<Tag>{
         Tag tag = null;
         if(!isEntityExist(name)) return tag;
         
+        String sql = "select * from TAG where name = ? ";
         try{
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("select * from TAG where name = '"+name+"' ");
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
 
             rs.next();
 
@@ -59,7 +61,7 @@ public class TagAccess implements DataAccess<Tag>{
             tag.setMemoList(memoList);
 
             rs.close();
-            st.close();
+            ps.close();
         }catch(SQLException se){
             se.printStackTrace();
             tag = null;
@@ -75,14 +77,12 @@ public class TagAccess implements DataAccess<Tag>{
         
         String tagName = t.getName();
         String memoListText = Util.tokenListToString(t.getMemoList());
-
         try{
             String sql = "insert into TAG (name, memo_list) values (?, ?)";
             PreparedStatement ps = connection.prepareStatement(sql);
-
+            
             ps.setString(1, tagName);
             ps.setString(2, memoListText);
-
             ps.execute();
             ps.close();
         }catch(SQLException se){
@@ -102,17 +102,17 @@ public class TagAccess implements DataAccess<Tag>{
         String memoListText = Util.tokenListToString(t.getMemoList());
         try{
             String sql = "update TAG "+
-            "set memo_list = '?' "+
-            "where name = '?'";
+            "set memo_list = ? "+
+            "where name = ? ";
             PreparedStatement ps = connection.prepareStatement(sql);
-
             ps.setString(1, memoListText);
             ps.setString(2, tagName);
-            
             ps.execute();
             ps.close();
         }catch(SQLException se){
             se.printStackTrace();
+        }catch(ArrayIndexOutOfBoundsException ae){
+            ae.printStackTrace();
         }
     }
 
@@ -123,7 +123,7 @@ public class TagAccess implements DataAccess<Tag>{
     public void deleteEntity(String name){
 
         try{
-            String sql = "delete from TAG where name = '?' ";
+            String sql = "delete from TAG where name = ? ";
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, name);

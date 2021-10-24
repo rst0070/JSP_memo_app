@@ -7,7 +7,11 @@ package com.rst.jsp_memo.data;
 public interface Entity {
     
     /**
-     * all get methods in Entity run this method for checking validation.<br/>
+     * if other methods in Entity use `checkValidation()` the code will be complex. <br/>
+     * so, get or set methods in Entity should not use this method.<br/>
+     * 
+     * The problem not using `checkValidation` is null value.
+     * all get methods check whethe value 
      * @return true: this Entity is valid. false: this Entity is not valid.
      */
     public boolean checkValidation();

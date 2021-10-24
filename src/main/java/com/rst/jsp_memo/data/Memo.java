@@ -35,23 +35,23 @@ public class Memo implements Entity{
 	}
 
 	public String getId(){
-		if(checkValidation()) return new String(this.id);
-		return null;
+		if(this.id == null) return null;
+		return new String(this.id);
 	}
 
 	public String getTitle(){
-		if(checkValidation()) return new String(this.title);
-		return null;
+		if(this.title == null) return null;
+		return new String(this.title);
 	}
 
 	public String getContent(){
-		if(checkValidation()) return new String(this.content);
-		return null;
+		if(this.content == null) return null;
+		return new String(this.content);
 	}
 
 	public LinkedList<String> getTagList(){
-		if(checkValidation()) return (LinkedList<String>)(this.tagList).clone();
-		return null;
+		if(this.tagList == null) return null;
+		return (LinkedList<String>)(this.tagList).clone();
 	}
 
 	/**
@@ -74,14 +74,36 @@ public class Memo implements Entity{
 	 * using get Entity from DB
 	 */
 	public void setId(String id){
-		this.id = id;
+		if(id == null) this.id = null;
+		else this.id = new String(id);
 	}
 
 	public void setTitle(String title){
-		this.title = title;
+		if(title == null) this.title = null;
+		else this.title = new String(title);
 	}
 
-	public void setContent(String content){	this.content = content;}
+	public void setContent(String content){
+		if(content == null) this.content = null;
+		else this.content = new String(content);}
 
-	public void setTagList(LinkedList<String> list){	this.tagList = list;}
+	public void setTagList(LinkedList<String> list){
+		if(list == null) this.tagList = null;
+		else this.tagList = (LinkedList<String>)list.clone();
+	}
+
+	@Override
+	public boolean equals(Object memo2){
+		if(!(memo2 instanceof Memo)) return false;
+		Memo m2 = (Memo)memo2;
+		if(!checkValidation()) return false;
+		if(!m2.checkValidation()) return false;
+		if(!m2.getId().equals(this.id)) return false;
+		if(!m2.getTitle().equals(this.title)) return false;
+		if(!m2.getTagList().equals(this.tagList)) return false;
+		if(!m2.getContent().equals(this.content)) return false;
+		
+		return true;
+	}
+
 }

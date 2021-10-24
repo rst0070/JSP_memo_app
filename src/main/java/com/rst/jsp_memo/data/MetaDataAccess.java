@@ -19,7 +19,7 @@ public class MetaDataAccess implements DataAccess<MetaData>{
     public boolean isEntityExist(String name){
         boolean exist = false;
         try{
-            PreparedStatement ps = connection.prepareStatement("select name from METADATA where name = '?' ");
+            PreparedStatement ps = connection.prepareStatement("select name from METADATA where name = ? ");
             ps.setString(1, name);
 
             ResultSet rs = ps.executeQuery();
@@ -36,7 +36,7 @@ public class MetaDataAccess implements DataAccess<MetaData>{
         if(!isEntityExist(name)) return data;
 
         String sql =
-        "select * from METADATA where name = '?' ";
+        "select * from METADATA where name = ? ";
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, name);
@@ -60,7 +60,7 @@ public class MetaDataAccess implements DataAccess<MetaData>{
         if(!m.checkValidation()) return;
 
         String sql = "insert into METADATA (name, value) "+
-        "values ('?', '?') ";
+        "values (?, ?) ";
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, m.getName());
@@ -76,8 +76,8 @@ public class MetaDataAccess implements DataAccess<MetaData>{
         if(!m.checkValidation()) return;
 
         String sql = "update METADATA "+
-        "set value = '?' "+
-        "where name = '?' ";
+        "set value = ? "+
+        "where name = ? ";
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, m.getValue());
@@ -92,7 +92,7 @@ public class MetaDataAccess implements DataAccess<MetaData>{
     @Override
 	public void deleteEntity(String name){
         String sql = "delete from METADATA "+
-        "where name = '?' ";
+        "where name = ? ";
         try{
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, name);

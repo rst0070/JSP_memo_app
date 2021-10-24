@@ -19,17 +19,23 @@ public class Tag implements Entity{
         return valid;
     }
 
-    public void setName(String name){ this.name = name; };
+    public void setName(String name){ 
+        if(name == null) this.name = null;
+        else this.name = new String(name);
+    };
 
-    public void setMemoList(LinkedList<String> list){ this.memoList = list; };
+    public void setMemoList(LinkedList<String> list){ 
+        if(list == null) this.memoList = null;
+        else this.memoList = (LinkedList<String>)list.clone(); 
+    }
 
     public String getName(){
-        if(checkValidation()) return new String(name);
-        return null;
+        if(name == null) return null;
+        return new String(name);        
     }
 
     public LinkedList<String> getMemoList(){
-        if(checkValidation()) return (LinkedList<String>)memoList.clone();
-        return null;
+        if(memoList == null) return null;
+        return (LinkedList<String>)memoList.clone();
     }
 }

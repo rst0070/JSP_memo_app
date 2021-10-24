@@ -7,8 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.*;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class DataAccessTest {
+public class TagTest {
 
+    @BeforeAll
+    public void init(){
+        DBConnection.testingMode(true);
+    }
     /**
      * 1. 아직 set을 하지않은 경우 invalid 상태이다.<br/>
      * 2. set을 하지 않았는데 get을 하면 null 반환한다.<br/>
@@ -17,7 +21,7 @@ public class DataAccessTest {
      * 5. when get 
      */
     @Test
-    @DisplayName("Test: Tag object")
+    @DisplayName("Test: Tag object and TagAccess")
     public void tagTest(){
         
         Tag tag = new Tag();
@@ -51,24 +55,10 @@ public class DataAccessTest {
         access.updateEntity(tag);
         tag2 = access.selectEntity(tag.getName());
         assertEquals(tag.getMemoList(), tag2.getMemoList());
+
+        //test delete
+        access.deleteEntity(tag.getName());
+        assertEquals(null, access.selectEntity(tag.getName()));
     }
 
-    @Test
-    @DisplayName("Test: Memo and MemoAccess")
-    public void memoTest(){
-        
-        Memo memo = new Memo();
-        memo.setId();
-        memo.setTitle("test title");
-
-        LinkedList<String> list = new LinkedList<String>();
-        list.add("thisIsNotExistingTagName");
-        memo.setTagList(list);
-        memo.setContent("this is test content");
-
-        assertEquals(false, memo.checkValidation());//because the memo has inExisting Tag.
-
-        list.poll();
-        list.add("testName");
-    }
 }

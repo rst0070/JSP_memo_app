@@ -6,24 +6,28 @@ public class MetaData implements Entity {
 
     @Override
     public boolean checkValidation(){
-        boolean result = true;
-
-        return result;
+        if(name == null) return false;
+        if(value == null) return false;
+        return true;
     }
 
     public String getName(){
+        if(name == null) return null;
         return new String(name);
     }
 
-    public String getValue(){ 
+    public String getValue(){
+        if(value == null)   return null;
         return new String(value);
     }
 
     public void setName(String name){
-        this.name = name;
+        if(name == null) this.name = null;
+        else this.name = name;
     }
 
-    public void setValue(String value){ 
-        this.value = value;
+    public void setValue(String value){
+        if(value == null) this.value = null;
+        else this.value = value;
     }
 }
