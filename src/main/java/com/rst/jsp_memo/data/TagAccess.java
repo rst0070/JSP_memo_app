@@ -16,6 +16,27 @@ public class TagAccess implements DataAccess<Tag>{
         return access;
     }
 
+    @Override
+    public LinkedList<Tag> selectAll(){
+        LinkedList<Tag> tagList = new LinkedList<Tag>();
+        String sql = "select * from TAG";
+
+        try{
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                Tag t = new Tag();
+                t.setMemoList(Util.tokenStringToList(rs.getString("memo_list")));
+                t.setName(rs.getString("name"));
+                
+                if(t.checkValidation()) tagList.add(t);
+            }
+        }catch(SQLException se){
+            se.printStackTrace();
+        }
+        return tagList;
+    }
 
     @Override
     public boolean isEntityExist(String tagName){

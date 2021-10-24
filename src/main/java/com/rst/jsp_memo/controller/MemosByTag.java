@@ -13,13 +13,15 @@ public class MemosByTag extends HttpServlet{
     private TagAccess tagAccess = TagAccess.getAccess();
     private MemoAccess memoAccess = MemoAccess.getAccess();
 
+
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         HttpSession session = request.getSession();
 
         session.setAttribute("visitedController", "true");
         String sessionId = session.getId();
 
-        //사용자가 요청한 태그명을 가져온다. 오류시 기본태그명사용
+        //사용자가 요청한 태그명을 가져온다. 오류시 모든메모 불러옴
         String tagName = request.getPathInfo();
         tagName = tagName.substring(1);// /memo 같은 형식으로 옴.
 

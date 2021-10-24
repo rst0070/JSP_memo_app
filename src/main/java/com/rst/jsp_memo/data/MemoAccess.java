@@ -20,6 +20,7 @@ public class MemoAccess implements DataAccess<Memo>{
         return access;
     }
 
+    @Override
     public LinkedList<Memo> selectAll(){
         LinkedList<Memo> list = new LinkedList<Memo>();
         String sql = "select * from MEMO";
@@ -33,7 +34,8 @@ public class MemoAccess implements DataAccess<Memo>{
                 m.setTitle(rs.getString("title"));
                 m.setTagList(Util.tokenStringToList(rs.getString("tag_list")));
                 m.setContent(rs.getString("content"));
-                list.add(m);
+                
+                if(m.checkValidation()) list.add(m);
             }
 
             rs.close();

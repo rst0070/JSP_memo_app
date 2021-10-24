@@ -2,7 +2,6 @@ package com.rst.jsp_memo.data;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import com.rst.jsp_memo.Util;
 import java.util.*;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -32,6 +31,22 @@ public class MetaDataTest {
         assertEquals(false, md.checkValidation());
     }
 
+
+    @Test
+    public void selectAll(){
+        MetaData[] data = new MetaData[10];
+        for(int i = 0; i < data.length; i++){
+            data[i] = new MetaData();
+            data[i].setName((i+1)+"");
+            data[i].setValue(((i+1)*(i+1))+"");
+            access.insertEntity(data[i]);
+        }
+
+        LinkedList<MetaData> list = access.selectAll();
+        
+        for(int i = 0; i < data.length; i++)
+            assertEquals(true, list.contains(data[i]));
+    }
 
     @Test
     public void insert(){

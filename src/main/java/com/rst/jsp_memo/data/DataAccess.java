@@ -1,5 +1,5 @@
 package com.rst.jsp_memo.data;
-
+import java.util.LinkedList;
 /**
 This is static factory class
 aim to read text files.
@@ -15,6 +15,7 @@ public interface DataAccess<E extends Entity> {
 	 * @param	primary key for the Entity
 	 * @return E - when there is Entity corresponds the `key`, null - error occured or invalid key
 	 */
+	public LinkedList<E> selectAll();
 	public E selectEntity(String key);
 	public void insertEntity(E e);
 	public void updateEntity(E e);

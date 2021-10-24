@@ -2,16 +2,38 @@ package com.rst.jsp_memo.data;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+
+import com.rst.jsp_memo.Util;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class TagTest {
 
-    @BeforeAll
+    private TagAccess access = TagAccess.getAccess();
+
+    @BeforeEach
     public void init(){
         DBConnection.testingMode(true);
+    }
+
+
+    @Test
+    @DisplayName("Test: TagAccess.selectAll()")
+    public void selectAll(){
+        Tag[] tag = new Tag[10];
+        for(int i = 0; i < tag.length; i++){
+            tag[i] = new Tag();
+            tag[i].setName( (i+1)+"" );
+            tag[i].setMemoList(Util.tokenStringToList("#1231#2342"));
+            access.insertEntity(tag[i]);
+        }
+
+        LinkedList<Tag> list = access.selectAll();
+
+        for(int i = 0; i < tag.length; i++)
+            assertTrue(list.contains(tag[i]));
     }
     /**
      * 1. 아직 set을 하지않은 경우 invalid 상태이다.<br/>
@@ -40,7 +62,7 @@ public class TagTest {
         assertEquals(true, tag.checkValidation());
         assertEquals("testName", tag.getName());
 
-        TagAccess access = TagAccess.getAccess();
+        
        
 
         //test insertEntity

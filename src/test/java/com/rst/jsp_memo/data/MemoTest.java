@@ -2,6 +2,8 @@ package com.rst.jsp_memo.data;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.rst.jsp_memo.Util;
 import java.util.*;
 /**
@@ -15,82 +17,89 @@ public class MemoTest{
     private MemoAccess access = MemoAccess.getAccess();
     private TagAccess accessTag = TagAccess.getAccess();
 
-    private Memo m;
-    private Tag t1, t2;
-    private LinkedList<String> tags;
+    private final String[] TAG_NAME = {"tag1", "tag2", "tag3", "tag4"};
 
     @BeforeEach
     public void setting(){
         DBConnection.testingMode(true);
-        m = new Memo();
-        tags = Util.tokenStringToList("#testTag1#testTag2");
-
-        m.setTagList(tags);
-        m.setTitle("test title");
-        m.setContent("asdasdasda");
-        m.setId();
-
-        t1 = new Tag();
-        t2 = new Tag();
-        t1.setMemoList(Util.tokenStringToList('#'+m.getId()));
-        t1.setName("testTag1");
-        t2.setMemoList(Util.tokenStringToList('#'+m.getId()));
-        t2.setName("testTag2");
-        
-
-        accessTag.insertEntity(t1);
-        accessTag.insertEntity(t2);
+        Tag[] tag = new Tag[TAG_NAME.length];
+        for(int i = 0; i < tag.length; i++){
+            tag[i] = new Tag();
+            tag[i].setName(TAG_NAME[i]);
+            tag[i].setMemoList(new LinkedList<String>());
+            accessTag.insertEntity(tag[i]);
+        }
     }
     
     @Test
     public void getSetTest(){
+        Memo m = new Memo();
+        m.setId();
+        m.setTitle("test title");
+        m.setContent("asdasdasda");
+        m.setTagList(Util.tokenStringToList('#'+TAG_NAME[0]+'#'+TAG_NAME[2]));
 
         assertEquals("test title", m.getTitle());
         assertEquals("asdasdasda", m.getContent());
-        assertEquals(tags, m.getTagList());
+        assertEquals(true, m.getTagList().contains(TAG_NAME[0]));
 
         assertEquals(true, m.checkValidation());//the tag is on db.
-        assertEquals(m.getId(), t1.getMemoList().peek());
     }
 
     @Test
     public void selectAll(){
-        access.insertEntity(m);
-        Memo m2 = new Memo();
-        m2.setId();
-        m2.setTitle("second memo");
-        m2.setTagList(Util.tokenStringToList("#testTag1"));
-        m2.setContent("sdfsdff");
-
-        access.insertEntity(m2);
-
+        Memo[] memo = new Memo[10];
+        for(int i = 0; i < memo.length; i++){
+            memo[i] = new Memo();
+            memo[i].setContent("sdfsfsdfsdf");
+            memo[i].setId();
+            memo[i].setTagList(Util.tokenStringToList('#'+TAG_NAME[0]));
+            memo[i].setTitle(((i+1)*(i+1))+"");
+            access.insertEntity(memo[i]);
+        }
         LinkedList<Memo> getList = access.selectAll();
-        assertEquals(true, getList.contains(m));
-        assertEquals(true, getList.contains(m2));
+        for(int i = 0; i < memo.length; i++)
+            assertTrue(getList.contains(memo[i]));
     }
 
     @Test
     public void insert(){
+        Memo m = new Memo();
+        m.setContent("asdasd");
+        m.setId();
+        m.setTagList(Util.tokenStringToList('#'+TAG_NAME[0]+'#'+TAG_NAME[2]));
+        m.setTitle("new title");
         access.insertEntity(m);
+
         Memo mGet = access.selectEntity(m.getId());
         assertEquals(m.getId(), mGet.getId());
         assertEquals(m.getTagList(), mGet.getTagList());
 
         //insertEntity should call addToTag method.
-        Tag tag = accessTag.selectEntity("testTag1");
+        Tag tag = accessTag.selectEntity(TAG_NAME[0]);
         assertEquals(true, tag.getMemoList().contains(m.getId()));
     }
 
     @Test
     public void update(){
+        Memo m = new Memo();
+        m.setContent("asdasd");
+        m.setId();
+        m.setTagList(Util.tokenStringToList('#'+TAG_NAME[0]+'#'+TAG_NAME[2]));
+        m.setTitle("new title");
         access.insertEntity(m);
+
+
         m.setContent("this is modifyied");
-        m.setTagList(Util.tokenStringToList("#testTag1"));
+        m.setTagList(Util.tokenStringToList('#'+TAG_NAME[1]));
         access.updateEntity(m);
+
         Memo mGet = access.selectEntity(m.getId());
         assertEquals(m.getContent(), mGet.getContent());
 
-        Tag tag = accessTag.selectEntity("testTag2");
+        Tag tag = accessTag.selectEntity(TAG_NAME[1]);
+        assertEquals(true, tag.getMemoList().contains(m.getId()));
+        tag = accessTag.selectEntity(TAG_NAME[0]);
         assertEquals(false, tag.getMemoList().contains(m.getId()));
     }
 
@@ -99,13 +108,19 @@ public class MemoTest{
      */
     @Test
     public void delete(){
+        Memo m = new Memo();
+        m.setContent("asdasd");
+        m.setId();
+        m.setTagList(Util.tokenStringToList('#'+TAG_NAME[0]+'#'+TAG_NAME[2]));
+        m.setTitle("new title");
         access.insertEntity(m);
+
         access.deleteEntity(m.getId());
         assertEquals(false, access.isEntityExist(m.getId()));
 
-        Tag tag = accessTag.selectEntity("testTag2");
+        Tag tag = accessTag.selectEntity(TAG_NAME[0]);
         assertEquals(false, tag.getMemoList().contains(m.getId()));
-        tag = accessTag.selectEntity("testTag1");
+        tag = accessTag.selectEntity(TAG_NAME[2]);
         assertEquals(false, tag.getMemoList().contains(m.getId()));
     }
 

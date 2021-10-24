@@ -38,4 +38,14 @@ public class Tag implements Entity{
         if(memoList == null) return null;
         return (LinkedList<String>)memoList.clone();
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof Tag)) return false;
+        Tag t = (Tag)obj;
+        if(!t.checkValidation() || !checkValidation()) return false;
+        if(!t.getMemoList().equals(memoList)) return false;
+        if(!t.getName().equals(name)) return false;
+        return true;
+    }
 }

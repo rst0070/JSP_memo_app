@@ -30,4 +30,15 @@ public class MetaData implements Entity {
         if(value == null) this.value = null;
         else this.value = value;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof MetaData)) return false;
+        MetaData md = (MetaData)obj;
+
+        if(!md.checkValidation() || !checkValidation()) return false;
+        if(!md.getName().equals(this.name)) return false;
+        if(!md.getValue().equals(this.value)) return false;
+        return true;
+    }
 }

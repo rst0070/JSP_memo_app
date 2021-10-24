@@ -96,8 +96,8 @@ public class Memo implements Entity{
 	public boolean equals(Object memo2){
 		if(!(memo2 instanceof Memo)) return false;
 		Memo m2 = (Memo)memo2;
-		if(!checkValidation()) return false;
-		if(!m2.checkValidation()) return false;
+		if(!m2.checkValidation() || !checkValidation()) return false;
+
 		if(!m2.getId().equals(this.id)) return false;
 		if(!m2.getTitle().equals(this.title)) return false;
 		if(!m2.getTagList().equals(this.tagList)) return false;

@@ -1,5 +1,6 @@
 package com.rst.jsp_memo.data;
 import java.sql.*;
+import java.util.*;
 
 public class MetaDataAccess implements DataAccess<MetaData>{
     private static MetaDataAccess access = null;
@@ -14,6 +15,25 @@ public class MetaDataAccess implements DataAccess<MetaData>{
     }
     
     
+    @Override
+    public LinkedList<MetaData> selectAll(){
+        LinkedList<MetaData> metaDataList = new LinkedList<MetaData>();
+        String sql = "select * from METADATA";
+        try{
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while(rs.next()){
+                MetaData md = new MetaData();
+                md.setName(rs.getString("name"));
+                md.setValue(rs.getString("value"));
+                if(md.checkValidation()) metaDataList.add(md);
+            }
+        }catch(SQLException se){
+            se.printStackTrace();
+        }
+        return metaDataList;
+    }
 
     @Override
     public boolean isEntityExist(String name){
