@@ -23,10 +23,14 @@ public class MemosByTag extends HttpServlet{
 
         //사용자가 요청한 태그명을 가져온다. 오류시 모든메모 불러옴
         String tagName = request.getPathInfo();
-        tagName = tagName.substring(1);// /memo 같은 형식으로 옴.
-
-        Tag tag = tagAccess.selectEntity(tagName);
-
+        Tag tag;
+        try{
+            tagName = tagName.substring(1);// /memo 같은 형식으로 옴.
+            tag = tagAccess.selectEntity(tagName);
+        }catch(NullPointerException ne){
+            tag = null;
+        }
+    
         if(tag == null){
             tag = new Tag();
             Iterator<Memo> allMemo = memoAccess.selectAll().iterator();

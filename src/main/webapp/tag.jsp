@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <%@ page import = "com.rst.jsp_memo.model.*" %>
-<%@ page import = "com.rst.jsp_memo.data.Memo" %>
+<%@ page import = "com.rst.jsp_memo.data.*" %>
 <%@ page import = "java.util.*" %>
 <%@ page import = "javax.servlet.http.*" %>
 <%
@@ -13,17 +13,17 @@
         session.setAttribute("visitedController", "false");
     }
     else{
-        response.sendRedirect("/tag/memo");
+        response.sendRedirect("/tag");
         return;
     }
 
     String sessionId = session.getId();
 
-    Iterator<String> tagList = Repository.getAllTags().iterator();
-
     TagDataModel model = (TagDataModel)Repository.get(sessionId);
     
     String TAG_NAME = model.getTagName();
+    LinkedList<Tag> tagList = model.getAllTags();
+    Iterator<Tag> tagIt = tagList.iterator();
     LinkedList<Memo> memoList = model.getMemoList();
 
 %>
@@ -39,19 +39,20 @@
 </head>
 <body>
     <header class="navBar">
+        <p class="tagName">All Memos</p>
         <% 
-        while( tagList.hasNext() ){
-            String tagName = tagList.next();
+        while( tagIt.hasNext() ){
+            Tag t = tagIt.next();
         %>
-            <p class="tagName"><%= tagName %></p>
+            <p class="tagName"><%= t.getName() %></p>
         <% } %>
     </header>
     <section class="container">
         <section class="sec1">
             <div class="newMemo">
                 <div contenteditable="true" id="NewMemoTitle"></div>
-                <div contenteditable="true" id="NewMemoTags"></div>
                 <div contenteditable="true" id="NewMemoContent"></div>
+                <button id="NewMemoTags">select tags</button>
                 <button id="NewMemoSave">save</button>
             </div>
         </section>
@@ -61,7 +62,7 @@
                 while(memoIt.hasNext()){
                     Memo m = memoIt.next();
             %>
-                <div class="memo" id="MEMO<%= m.getMemoId() %>">
+                <div class="memo" id="MEMO<%= m.getId() %>">
                     <div contenteditable="true" class="memoTitle"><%= m.getTitle() %></div>
                     <div contenteditable="true" class="memoTags">
                         <% 
@@ -71,13 +72,15 @@
                         }
                         %>
                     </div>
-                    <div contenteditable="true" class="memoContent"><%= m.getContents() %></div>
-                    <button class="memoModify" onClick="modifyMemo(<%= m.getMemoId() %>);">modify</button>
+                    <div contenteditable="true" class="memoContent"><%= m.getContent() %></div>
+                    <button class="memoModify" onClick="modifyMemo(<%= m.getId() %>);">modify</button>
                 </div>
             <%}%>
         </section>
     </section>
+    <div class="selectTagPannel">
 
+    </div>
     <script src="/static/js/tag.js"></script>
 </body>
 
