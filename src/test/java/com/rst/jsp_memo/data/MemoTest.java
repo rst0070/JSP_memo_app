@@ -58,6 +58,7 @@ public class MemoTest{
             access.insertEntity(memo[i]);
         }
         LinkedList<Memo> getList = access.selectAll();
+        
         for(int i = 0; i < memo.length; i++)
             assertTrue(getList.contains(memo[i]));
     }

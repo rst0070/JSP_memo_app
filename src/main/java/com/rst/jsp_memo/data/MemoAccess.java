@@ -20,6 +20,21 @@ public class MemoAccess implements DataAccess<Memo>{
         return access;
     }
 
+    public String generateId(){
+        String id = "";
+        Calendar cal = Calendar.getInstance();
+		
+		id += cal.get(cal.MILLISECOND);
+		id += cal.get(cal.SECOND);
+		id += cal.get(cal.MINUTE);
+		id += cal.get(cal.HOUR);
+
+        long mod = 2000000000000L;
+        long timeId = ( (Long.parseLong(id) % mod )* (new Double(Math.random() * 100).longValue()) ) % mod;
+        id = timeId + "";
+        if( isEntityExist(id) ) id = generateId();
+        return id;
+    }
     @Override
     public LinkedList<Memo> selectAll(){
         LinkedList<Memo> list = new LinkedList<Memo>();
@@ -111,8 +126,8 @@ public class MemoAccess implements DataAccess<Memo>{
      */
     @Override
     public void insertEntity(Memo m){
-        if(!m.checkValidation()) return;
-        if(isEntityExist(m.getId())) return;
+        if(!m.checkValidation()){return;}
+        if(isEntityExist(m.getId())){System.out.println(m.getTitle());return;}
 
         String sql =
         "insert into MEMO (id, title, tag_list, content) values (?, ?, ?, ?)";
@@ -183,6 +198,13 @@ public class MemoAccess implements DataAccess<Memo>{
      */
     @Override
     public void deleteEntity(String id){
+        /**
+         * remove from TAG.memo_list
+         * must executed ahead delete entity.
+         */
+        Memo m = selectEntity(id);
+        removeFromTags(m);
+
         String sql =
         "delete from MEMO where id = ? ";
 
@@ -192,9 +214,7 @@ public class MemoAccess implements DataAccess<Memo>{
             ps.execute();
             ps.close();
 
-            //remove from TAG.memo_list
-            Memo m = selectEntity(id);
-            removeFromTags(m);
+            
 
         }catch(SQLException se){
             se.printStackTrace();

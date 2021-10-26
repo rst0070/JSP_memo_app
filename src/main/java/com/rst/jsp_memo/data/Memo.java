@@ -58,16 +58,8 @@ public class Memo implements Entity{
 	 * Using present time data, make unique String for primary key of this Entity.
 	 */
 	public void setId(){
-		Calendar cal = Calendar.getInstance();
-		String timeId = "";
-		timeId += cal.get(cal.MILLISECOND);
-		timeId += cal.get(cal.SECOND);
-		timeId += cal.get(cal.MINUTE);
-		timeId += cal.get(cal.HOUR);
-		timeId += cal.get(cal.DATE);
-		timeId += cal.get(cal.MONTH);
-		timeId += cal.get(cal.YEAR);
-		this.id = timeId;
+		MemoAccess access = MemoAccess.getAccess();
+		this.id = access.generateId();
 	}
 
 	/**
