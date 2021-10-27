@@ -1,1 +1,50 @@
-<h1>hi</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSP_MEMO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="css/tag/main.css"/>
+    <link type="text/css" rel="stylesheet" href="css/tag/memo.css"/>
+    <link type="text/css" rel="stylesheet" href="css/tag/navbar.css"/>
+    <script src="js/tag/newMemo.js"></script>
+    <script>
+        const TAG_NAME = "";
+    </script>
+</head>
+<body>
+    <header class="navBar">
+        <p class="tagName">All Memos</p>
+        <p class="tagName">git</p>
+        <p class="tagName">java</p>
+        <p class="tagName">flutter</p>
+        <p class="tagName">linear-algebar</p>
+        <p class="tagName">swift</p>
+        <p class="tagName">algorithm</p>
+        <p class="tagName">spring</p>
+    </header>
+    <section class="container">
+        <section class="sec1">
+            <div class="newMemo">
+                <div contenteditable="true" id="NewMemoTitle"></div>
+                <div contenteditable="true" id="NewMemoContent"></div>
+                <button id="NewMemoTagSelect">select tags</button>
+                <button id="NewMemoSave">save</button>
+            </div>
+        </section>
+        <section class="sec2">
+            <div class="memo">
+                <div contenteditable="true" class="memoTitle"></div>
+                <div contenteditable="true" class="memoTags"></div>
+                <div contenteditable="true" class="memoContent"></div>
+                <button class="memoModify">modify</button>
+            </div>
+        </section>
+    </section>
+    <div class="selectTagPannel">
+
+    </div>
+    <script src="/static/js/tag.js"></script>
+</body>
+
+</html>
