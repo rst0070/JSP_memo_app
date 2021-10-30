@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="js/tag/TagSelectPannel.js"></script>
     <script src="js/tag/EditPannel.js"></script>
     <style>
         body {
@@ -11,22 +12,26 @@
     </style>
 </head>
 <body>
-    <div id="editPannel">
-
-    </div>
-    
+    <div id="editPannel"></div>
+    <div id="tagSelectPannel"></div>
     <button id="button">click me</button>
     <script>
-
+        
         var tagList = ["java", "kotlin", "flutter", "react"];
         var content = "The integrity and crossorigin attributes are used for Subresource Integrity (SRI) checking.\n"+
         "This allows browsers to ensure that resources hosted on third-party servers have not been tampered with.\n"+
         "Use of SRI is recommended as a best-practice, whenever libraries are loaded from a third-party source.";
 
-        let e = new EditPannel("editPannel");
+        const tagSelectPannel = new TagSelectPannel('tagSelectPannel', tagList);
+        const editPannel = new EditPannel("editPannel");
+        editPannel.setReturnFunction((title, content, tagList)=>{
+            console.log(title);
+            console.log(content);
+            console.log(tagList);
+        })
         $('#button').on('click', ()=>{
-            e.setText("title", content, tagList)
-            e.setVisible(true);
+            editPannel.setText("title", content, tagList)
+            editPannel.setVisible(true);
         })
     </script>
 </body>

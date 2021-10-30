@@ -42,6 +42,13 @@ class EditPannel{
     }
 
     /**
+     * when save button pressed, returnFunction gets title, content, tagList
+     * @param {function} returnFunction function(title, content, tagList)
+     */
+    setReturnFunction(returnFunction){
+        this.returnFunction = returnFunction;
+    }
+    /**
      * @param {boolean} visible 
      */
     setVisible(visible){
@@ -91,16 +98,43 @@ class EditPannel{
         this.$tagList.css({
             fontStyle: "italic"
         });
+
+        let self = this;
+        
+        tagSelectPannel.setReturnFunction((list)=>{
+            self.tagList = list;
+            let tagListStr = "";
+            self.tagList.forEach((str) => {
+                tagListStr += '#' + str + '\t';
+            });
+
+            self.$tagList.text(tagListStr);
+        });
     }
 
     setTagButton(){
         this.$container.append('<button id="modifyTagButton">modify tag</button>');
         this.$tagButton = $('#modifyTagButton');
+        this.$tagButton.on('click', ()=>{
+            tagSelectPannel.setVisible(true);
+        })
     }
 
     setSaveButton(){
         this.$container.append('<button id="saveMemoButton">save</button>');
         this.$saveButton = $('#saveMemoButton');
+        this.$saveButton.on('click', ()=>{
+            let title = this.$title.text();
+            let content = this.$content.text();
+            let tagList = [];
+            this.tagList.forEach(element=>{
+                tagList.push(element);
+            })
+
+            this.returnFunction(title, content, tagList);
+            this.clean();
+            this.setVisible(false);
+        })
     }
 
     setCloseButton(){

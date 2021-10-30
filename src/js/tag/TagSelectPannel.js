@@ -75,6 +75,7 @@ class TagSelectPannel{
                 console.log(this.value);
              });
             this.returnFunction(this.copyArray(this.selectedTagList));
+            this.close();
         });
     }
 
@@ -83,13 +84,16 @@ class TagSelectPannel{
         this.$container.append("<button id='" + buttonId + "'>close</button>");
         this.$closeButton = $('#' + buttonId);
         this.$closeButton.on('click', ()=>{
-            $('input[class="tagCheckbox"]:checked').each(function() {
-                this.checked = false;
-            });
-            this.setVisible(false);
+            this.close();
         });
     }
 
+    close(){
+        $('input[class="tagCheckbox"]:checked').each(function() {
+            this.checked = false;
+        });
+        this.setVisible(false);
+    }
     copyArray(arr){
         let newArray = [];
         arr.forEach(element => {
