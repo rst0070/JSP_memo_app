@@ -1,17 +1,25 @@
+/**
+ * HOW TO USE <br/>
+ * Constructor sets innerHtml and references for them.(set methods)
+ * by `setText(title: string, content: string, tagList: array of string)`, you can set inner text of EditPannel.
+ * by `setVisible(boolean)`, you can set visiblity.
+ * by `clean()`, you can remove all inner texts constructed by setText.
+ */
 class EditPannel{
 
     /**
-     * @param title
+     * @param {string} containerID container that EditPannel will be in.
      */
-    constructor(containerID, title, content, tagList){
-        let $pannel = $('#'+containerID);
-        $pannel.append('<div id="editContainer"></div>');
-        $pannel.css({
+    constructor(containerID){
+        this.$pannel = $('#'+containerID);
+        this.$pannel.append('<div id="editContainer"></div>');
+        this.$pannel.css({
             content : " ",
             position: "absolute",
             width: "100%",
             height: "100%",
-            background:"rgba(150, 150, 150, 0.5)"
+            background:"rgba(150, 150, 150, 0.5)",
+            display: "none"
         });
         this.$container = $('#editContainer');
         this.$container.css({
@@ -25,41 +33,61 @@ class EditPannel{
             boxShadow:"0 0 0 1px gray"
         });
 
-        this.setTitle(title);
-        this.setContent(content);
-        this.setTagList(tagList);
+        this.setTitle();
+        this.setContent();
+        this.setTagList();
         this.setTagButton();
         this.setSaveButton();
+        this.setCloseButton();
     }
 
-    setTitle(titleStr){
+    /**
+     * @param {boolean} visible 
+     */
+    setVisible(visible){
+        let value = "block";
+        if(!visible) value = "none";
+
+        this.$pannel.css({
+            display: value
+        })
+    }
+
+    setText(title, content, tagList){
+        this.$title.text(title);
+        this.$content.text(content);
+
+        this.tagList = tagList;
+        let tagListStr = "";
+        this.tagList.forEach((str) => {
+            tagListStr += '#' + str + '\t';
+        });
+
+        this.$tagList.text(tagListStr);
+    }
+
+    clean(){
+        this.$title.text("");
+        this.$content.text("");
+        this.tagList = [];
+        this.$tagList.text("");
+    }
+    setTitle(){
         this.$container.append('<div contenteditable="true" id="editTitle"></div>');
         this.$title = $('#editTitle');
-        this.$title.text(titleStr);
-
         this.$title.css({
             fontWeight: "bold"
         });
     }
 
-    setContent(contentStr){
+    setContent(){
         this.$container.append('<div contenteditable="true" id="editContent"></div>');
-        
         this.$content = $('#editContent');
-        this.$content.text(contentStr);
     }
 
-    setTagList(tagListArr){
+    setTagList(){
         this.$container.append('<div id="editTagList"></div>');
         this.$tagList = $('#editTagList');
-
-        this.tagList = tagListArr;
-        let tagListStr = "";
-        tagListArr.forEach((str) => {
-            tagListStr += '#' + str + '\t';
-        });
-
-        this.$tagList.text(tagListStr);
         this.$tagList.css({
             fontStyle: "italic"
         });
@@ -68,11 +96,19 @@ class EditPannel{
     setTagButton(){
         this.$container.append('<button id="modifyTagButton">modify tag</button>');
         this.$tagButton = $('#modifyTagButton');
-
     }
 
     setSaveButton(){
         this.$container.append('<button id="saveMemoButton">save</button>');
         this.$saveButton = $('#saveMemoButton');
+    }
+
+    setCloseButton(){
+        this.$container.append('<button id="closeMemoButton">close</button>');
+        this.$closeButton = $('#closeMemoButton');
+        this.$closeButton.on('click', (()=>{
+            this.clean();
+            this.setVisible(false);
+        }).bind(this));
     }
 }

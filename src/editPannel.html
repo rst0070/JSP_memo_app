@@ -15,6 +15,7 @@
 
     </div>
     
+    <button id="button">click me</button>
     <script>
 
         var tagList = ["java", "kotlin", "flutter", "react"];
@@ -22,7 +23,11 @@
         "This allows browsers to ensure that resources hosted on third-party servers have not been tampered with.\n"+
         "Use of SRI is recommended as a best-practice, whenever libraries are loaded from a third-party source.";
 
-        var e = new EditPannel("editPannel", "title", content, tagList);
+        let e = new EditPannel("editPannel");
+        $('#button').on('click', ()=>{
+            e.setText("title", content, tagList)
+            e.setVisible(true);
+        })
     </script>
 </body>
 </html>
