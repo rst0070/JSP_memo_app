@@ -14,18 +14,19 @@
     <div id="tagSelectPannel">
 
     </div>
-    
+    <div id="memo"></div>
     <button id="button">click me</button>
     <script>
 
         var tagList = ["java", "kotlin", "flutter", "react"];
-        var content = "The integrity and crossorigin attributes are used for Subresource Integrity (SRI) checking.\n"+
-        "This allows browsers to ensure that resources hosted on third-party servers have not been tampered with.\n"+
-        "Use of SRI is recommended as a best-practice, whenever libraries are loaded from a third-party source.";
 
-        let e = new TagSelectPannel("tagSelectPannel");
+        let e = new TagSelectPannel("tagSelectPannel", tagList);
+        e.setReturnFunction((listOfTag)=>{
+            listOfTag.forEach((element)=>{
+                $('#memo').append('<p>'+element+'</p>');
+            })
+        })
         $('#button').on('click', ()=>{
-            e.setText("title", content, tagList)
             e.setVisible(true);
         })
     </script>

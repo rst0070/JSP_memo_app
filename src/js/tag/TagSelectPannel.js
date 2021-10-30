@@ -31,25 +31,70 @@ class TagSelectPannel{
 
         this.allTagList = tagList;
         this.setList();
+        this.setSaveButton();
+        this.setCloseButton();
     }
 
+    /**
+     * this method sets function that get list of tag selection from this object
+     * @param {function} returnFunction 
+     */
     setReturnFunction(returnFunction){
         this.returnFunction = returnFunction;
     }
 
+    setVisible(visible){
+        let value = 'none';
+        if(visible) value = 'block';
+        this.$pannel.css({
+            display : value
+        });
+    }
+
     setList(){
-        this.$container.append("<div></div>")
+        this.$container.append("<div id='selectTagDiv'></div>");
+        this.$selectTagDiv = $('#selectTagDiv');
+        this.$selectTagDiv.css({
+            height:"10em",
+            overflow:"auto"
+        });
+        this.allTagList.forEach(element => {
+            this.$selectTagDiv.append("<input id='tagCheckbox"+element+"' type='checkbox' class='tagCheckbox' value='" + element + "'/>");
+            this.$selectTagDiv.append("<label for='tagCheckbox"+element+"' >" + element + "</label><br/>");
+        });
     }
     setSaveButton(){
         let buttonId = 'saveTagButton';
         this.$container.append("<button id='" + buttonId + "'>save</button>");
         this.$saveButton = $('#' + buttonId);
         this.$saveButton.on('click', ()=>{
-            this.returnFunction(this.selectedTagList);
+            this.selectedTagList = [];
+            let list = this.selectedTagList;
+            $('input[class="tagCheckbox"]:checked').each(function() {
+                list.push(this.value);
+                console.log(this.value);
+             });
+            this.returnFunction(this.copyArray(this.selectedTagList));
         });
     }
 
     setCloseButton(){
+        let buttonId = 'closeTagButton';
+        this.$container.append("<button id='" + buttonId + "'>close</button>");
+        this.$closeButton = $('#' + buttonId);
+        this.$closeButton.on('click', ()=>{
+            $('input[class="tagCheckbox"]:checked').each(function() {
+                this.checked = false;
+            });
+            this.setVisible(false);
+        });
+    }
 
+    copyArray(arr){
+        let newArray = [];
+        arr.forEach(element => {
+            newArray.push(element);
+        });
+        return newArray;
     }
 }
