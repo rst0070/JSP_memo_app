@@ -146,3 +146,5 @@ class EditPannel{
         }).bind(this));
     }
 }
+
+export const memoEditPannel = EditPannel;

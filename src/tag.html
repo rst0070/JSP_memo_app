@@ -7,7 +7,7 @@
     <link type="text/css" rel="stylesheet" href="css/tag/main.css"/>
     <link type="text/css" rel="stylesheet" href="css/tag/memo.css"/>
     <link type="text/css" rel="stylesheet" href="css/tag/navbar.css"/>
-    <script src="js/tag/newMemo.js"></script>
+    <script type="module" src="js/tag/main.js"></script>
     <script>
         const TAG_NAME = "";
     </script>
@@ -26,10 +26,7 @@
     <section class="container">
         <section class="sec1">
             <div class="newMemo">
-                <div contenteditable="true" id="NewMemoTitle"></div>
-                <div contenteditable="true" id="NewMemoContent"></div>
-                <button id="NewMemoTagSelect">select tags</button>
-                <button id="NewMemoSave">save</button>
+                <button id="NewMemoButton">open new memo</button>
             </div>
         </section>
         <section class="sec2">
@@ -41,10 +38,8 @@
             </div>
         </section>
     </section>
-    <div class="selectTagPannel">
-
+    <div id="selectTagContainer">
     </div>
-    <script src="/static/js/tag.js"></script>
 </body>
 
 </html>

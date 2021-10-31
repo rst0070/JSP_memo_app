@@ -37,7 +37,7 @@ class TagSelectPannel{
 
     /**
      * this method sets function that get list of tag selection from this object
-     * @param {function} returnFunction 
+     * @param {function} returnFunction(tagLis: arr of string)
      */
     setReturnFunction(returnFunction){
         this.returnFunction = returnFunction;
@@ -72,7 +72,6 @@ class TagSelectPannel{
             let list = this.selectedTagList;
             $('input[class="tagCheckbox"]:checked').each(function() {
                 list.push(this.value);
-                console.log(this.value);
              });
             this.returnFunction(this.copyArray(this.selectedTagList));
             this.close();
@@ -102,3 +101,5 @@ class TagSelectPannel{
         return newArray;
     }
 }
+
+export const tagSelectPannel = TagSelectPannel;
