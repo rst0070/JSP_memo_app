@@ -1,5 +1,6 @@
 body{
     margin:0;
+    position: relative;
 }
 
 
@@ -9,13 +10,3 @@ body{
 
 }
 .sec1 { position: relative;}
-
-
-.selectTagPannel {
-    position: absolute;
-    z-index: 5;
-    display: none;
-    width: 100%;
-    height: 100%;
-    background: rgba(226, 226, 226, 0.8);
-}

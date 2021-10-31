@@ -10,12 +10,16 @@ class EditPannel{
     /**
      * @param {string} containerID container that EditPannel will be in.
      */
-    constructor(containerID){
+    constructor(containerID, tagSelectPannelObj){
+        this.tagSelectPannel = tagSelectPannelObj;
         this.$pannel = $('#'+containerID);
         this.$pannel.append('<div id="editContainer"></div>');
         this.$pannel.css({
             content : " ",
             position: "absolute",
+            top:"0",
+            left:"0",
+            zIndex:"5",
             width: "100%",
             height: "100%",
             background:"rgba(150, 150, 150, 0.5)",
@@ -24,6 +28,7 @@ class EditPannel{
         this.$container = $('#editContainer');
         this.$container.css({
             width:"20em",
+            height:"auto",
             marginLeft: "auto",
             marginRight: "auto",
             marginTop: "5em",
@@ -83,6 +88,7 @@ class EditPannel{
         this.$container.append('<div contenteditable="true" id="editTitle"></div>');
         this.$title = $('#editTitle');
         this.$title.css({
+            height: "2em",
             fontWeight: "bold"
         });
     }
@@ -90,6 +96,9 @@ class EditPannel{
     setContent(){
         this.$container.append('<div contenteditable="true" id="editContent"></div>');
         this.$content = $('#editContent');
+        this.$content.css({
+            height: "8em"
+        });
     }
 
     setTagList(){
@@ -101,7 +110,7 @@ class EditPannel{
 
         let self = this;
         
-        tagSelectPannel.setReturnFunction((list)=>{
+        this.tagSelectPannel.setReturnFunction((list)=>{
             self.tagList = list;
             let tagListStr = "";
             self.tagList.forEach((str) => {
@@ -115,8 +124,9 @@ class EditPannel{
     setTagButton(){
         this.$container.append('<button id="modifyTagButton">modify tag</button>');
         this.$tagButton = $('#modifyTagButton');
+        let self = this;
         this.$tagButton.on('click', ()=>{
-            tagSelectPannel.setVisible(true);
+            self.tagSelectPannel.setVisible(true);
         })
     }
 

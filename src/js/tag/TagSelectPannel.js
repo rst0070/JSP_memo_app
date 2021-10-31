@@ -11,7 +11,10 @@ class TagSelectPannel{
         this.$pannel.append('<div id="tagContainer"></div>');
         this.$pannel.css({
             content : " ",
-            position: "absolute",
+            position: "fixed",
+            top:"0",
+            left: "0",
+            zIndex:"6",
             width: "100%",
             height: "100%",
             background:"rgba(150, 150, 150, 0.5)",

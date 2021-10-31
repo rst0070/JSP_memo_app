@@ -1,20 +1,24 @@
 import { MemoOBJ } from "./Memo.js";
-import { MemoEditPannelOBJ } from "./EditPannel.js";
+import { memoEditPannel } from "./EditPannel.js";
 import { tagSelectPannel } from "./TagSelectPannel.js";
 //rest api??
 function main(){
     const allTagList = ['java', 'flutter', 'swift', 'linear-algebra', 'react'];
-    const TSP = new tagSelectPannel("selectTagContainer", allTagList);
 
-    function getNewMemo(tag_list){
+    const TSP = new tagSelectPannel("selectTagContainer", allTagList);
+    const MEP = new memoEditPannel("memoEditContainer", TSP);
+
+    function createNewMemo(title, content, tag_list){
+        console.log(title);
+        console.log(content);
         tag_list.forEach(element => {
             console.log(element);
         })
     }
-
-    TSP.setReturnFunction(getNewMemo);
     $('#NewMemoButton').on('click', ()=>{
-        TSP.setVisible(true);
+        MEP.setReturnFunction(createNewMemo);
+        MEP.setText("title", "type content..", []);
+        MEP.setVisible(true);
     })
 }
 $(main);
