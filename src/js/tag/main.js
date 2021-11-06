@@ -1,4 +1,4 @@
-import { MemoOBJ } from "./Memo.js";
+import { ajax } from "./Ajax.js";
 import { memoEditPannel } from "./EditPannel.js";
 import { tagSelectPannel } from "./TagSelectPannel.js";
 //rest api??
@@ -20,18 +20,14 @@ function main(){
     const MEP = new memoEditPannel("memoEditContainer", TSP);
 
     function createNewMemo(title, content, tag_list){
-        console.log(title);
-        console.log(content);
-        tag_list.forEach(element => {
-            console.log(element);
-        })
+        ajax.createMemo(title, content, tag_list);
     }
 
     /**
      * execute AJAX actions to modify memo already exists.
      */
     function modifyMemo(memoID, title, content, tag_list){
-
+        ajax.modifyMemo(memoID, title, content, tag_list);
     }
 
     /**

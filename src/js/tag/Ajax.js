@@ -6,12 +6,17 @@
  */
 class Ajax{
     constructor(){
-        this.url.memo.create = "/memo/create";
-        this.url.memo.modify = "/memo/modify";
-        this.url.memo.delete = "/memo/delete";
-
-        this.url.tag.create = "/tag/create";
-        this.url.tag.delete = "/tag/delete";
+        this.url = {
+            memo : {
+                create : "/memo/create",
+                modify : "/memo/modify",
+                delete : "/memo/delete"
+            },
+            tag : {
+                create : "/tag/create",
+                delete : "/tag/delete"
+            }
+        };
     }
 
     createTag(tagName){
@@ -45,20 +50,22 @@ class Ajax{
         });
     }
 
-    createMemo(title, content, tagList){
-        if(!title) title = "";
-        if(!content) content = "";
-        if(!tagList) tagList = [""];
+    createMemo(memoTitle, memoContent, memoTagList){
+        if(!memoTitle) memoTitle = "";
+        if(!memoContent) memoContent = "";
+        if(!memoTagList) memoTagList = [""];
 
+        console.log(this.url.memo.create);
+        let dataObj = {
+            title : memoTitle,
+            content : memoContent,
+            tagList : memoTagList
+        }
         $.ajax({
             url : this.url.memo.create,
             type: 'POST',
             dataType: 'json',
-            data : {
-                title : title,
-                content : content,
-                tagList : tagList
-            },
+            data : dataObj,
             success: () => {
                 this.reload(tagList[0]);
             }
@@ -110,5 +117,4 @@ class Ajax{
 }
 
 
-export const ajax;
-ajax = new Ajax(); 
+export const ajax = new Ajax();

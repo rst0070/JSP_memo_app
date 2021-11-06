@@ -2,7 +2,6 @@
 <html>
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="js/tag/TagSelectPannel.js"></script>
     <style>
         body {
             margin: 0;
@@ -16,11 +15,11 @@
     </div>
     <div id="memo"></div>
     <button id="button">click me</button>
-    <script>
-
+    <script type="module">
+        import { tagSelectPannel } from "/js/tag/TagSelectPannel.js";
         var tagList = ["java", "kotlin", "flutter", "react"];
 
-        let e = new TagSelectPannel("tagSelectPannel", tagList);
+        let e = new tagSelectPannel("tagSelectPannel", tagList);
         e.setReturnFunction((listOfTag)=>{
             listOfTag.forEach((element)=>{
                 $('#memo').append('<p>'+element+'</p>');
