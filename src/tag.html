@@ -14,14 +14,14 @@
 </head>
 <body>
     <header class="navBar">
-        <p class="tagName">All Memos</p>
-        <p class="tagName">git</p>
-        <p class="tagName">java</p>
-        <p class="tagName">flutter</p>
-        <p class="tagName">linear-algebar</p>
-        <p class="tagName">swift</p>
-        <p class="tagName">algorithm</p>
-        <p class="tagName">spring</p>
+        <p><a>All Memos</a></p>
+        <p class="tagName" value="git"><a>git</a></p>
+        <p class="tagName" value="java"><a>java</a></p>
+        <p class="tagName" value="flutter"><a>flutter</a></p>
+        <p class="tagName" value="linear-algebar"><a>linear-algebar</a></p>
+        <p class="tagName" value="swift"><a>swift</a></p>
+        <p class="tagName" value="algorithm"><a>algorithm</a></p>
+        <p class="tagName" value="spring"><a>spring</a></p>
     </header>
     <section class="container">
         <section class="sec1">
@@ -30,11 +30,17 @@
             </div>
         </section>
         <section class="sec2">
-            <div class="memo">
-                <id></id>
-                <div contenteditable="true" class="memoTitle"></div>
-                <div contenteditable="true" class="memoTags"></div>
-                <div contenteditable="true" class="memoContent"></div>
+            <div class="memo" memoid="IDcreatedByJsp">
+                <div class="memoTitle">필요한것들, 해야할 것들</div>
+                <div class="memoTags">
+                    <span class="tag" value="kotlin">#kotlin</span>
+                    <span class="tag" value="java">#java</span>
+                    <span class="tag" value="react">#react</span>
+                </div>
+                <pre class="memoContent">
+                JSP_MEMO 완성하기 -> Spring framework 공부하기( Spring in action : taco cloud),
+                알고리즘 공부하기 -> 알고리즘 문제해결전략 책 공부.
+                </pre>
                 <button class="memoModify">modify</button>
             </div>
         </section>

@@ -27,7 +27,7 @@ class EditPannel{
         });
         this.$container = $('#editContainer');
         this.$container.css({
-            width:"20em",
+            width:"40em",
             height:"auto",
             marginLeft: "auto",
             marginRight: "auto",
@@ -35,7 +35,8 @@ class EditPannel{
             background:"white",
             padding:"1em",
             borderRadius:"0.2em",
-            boxShadow:"0 0 0 1px gray"
+            boxShadow:"0 0 0 1px gray",
+            overflow:"auto"
         });
 
         this.setTitle();
@@ -89,15 +90,17 @@ class EditPannel{
         this.$title = $('#editTitle');
         this.$title.css({
             height: "2em",
-            fontWeight: "bold"
+            fontWeight: "bold",
+            overflow:"auto"
         });
     }
 
     setContent(){
-        this.$container.append('<div contenteditable="true" id="editContent"></div>');
+        this.$container.append('<pre contenteditable="true" id="editContent"></pre>');
         this.$content = $('#editContent');
         this.$content.css({
-            height: "8em"
+            height: "40em",
+            overflow:"auto"
         });
     }
 
@@ -105,7 +108,8 @@ class EditPannel{
         this.$container.append('<div id="editTagList"></div>');
         this.$tagList = $('#editTagList');
         this.$tagList.css({
-            fontStyle: "italic"
+            fontStyle: "italic",
+            overflow:"auto"
         });
 
         let self = this;
