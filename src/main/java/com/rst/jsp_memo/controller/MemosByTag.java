@@ -48,14 +48,4 @@ public class MemosByTag extends HttpServlet{
         
     }
 
-   
-
-    /**
-     * 메모를 수정하거나 새로만드는 작업을 진행한다.
-     * 
-     */
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
-        
-    }
-
 }

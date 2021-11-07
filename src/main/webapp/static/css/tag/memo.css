@@ -1,0 +1,70 @@
+.newMemo{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+    width: 20em;
+    box-shadow: 0 0 1px 1px gray;
+    border-radius: 0.1em;
+}
+
+#NewMemoTitle::before{
+    content: "title..";
+    size: 0.8em;
+}
+#NewMemoTitle {
+    margin-top: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+
+#NewMemoContent::before{
+    content: "type memo..";
+    size: 0.8em;
+}
+#NewMemoContent {
+    margin-left: auto;
+    margin-right: auto;
+    height: 3em;
+    width: 90%;
+}
+#NewMemoTagSelect {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+}
+#NewMemoSave{
+    width: 5em;
+    margin-top: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+.memo{
+    display: inline-block;
+    padding: 0.5em;
+    min-width: 15em;
+    min-height: 8em;
+
+    border-radius: 0.5em;
+    box-shadow: 0 0 0 1px gray;
+
+}
+.memoTitle {
+    display: block;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+.memoContent {
+    display: block;
+    border: none;
+    overflow: visible;
+}
+.memoModify {
+    margin-bottom: 0.2em;
+}
