@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "jquery": "^3.6.0"
+    "jquery": "^3.6.0",
+    "body-parser":"1.19.0"
   },
   "repository": {
     "type": "git",
