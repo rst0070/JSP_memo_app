@@ -3,6 +3,8 @@ package com.rst.jsp_memo.controller;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
+import com.rst.jsp_memo.data.*;
+import org.json.*;
 
 public class MemoAction extends HttpServlet{
 
@@ -29,7 +31,11 @@ public class MemoAction extends HttpServlet{
 
     private LinkedList<String> jsonArrayToStringList(String jsonArr){
         LinkedList<String> result = new LinkedList<String>();
-
+        JSONArray array = new JSONArray(jsonarr);
+        Iterator<Object> it = array.iterator();
+        while(it.hasNext()){
+            result.add((String)it.next());
+        }
         return result;
     }
 
@@ -70,6 +76,7 @@ public class MemoAction extends HttpServlet{
         LinkedList<String> tagList = null;
     }
 
+    private MemoAccess access = MemoAccess.getAccess();
     /**
      * 
      * @param d contains title, content, tagList. Id will defined by Memo obj
@@ -78,7 +85,13 @@ public class MemoAction extends HttpServlet{
     private boolean createMemo(Data d){
         boolean result = true;
 
+        Memo memo = new Memo();
+        memo.setId();
+        memo.setTitle(d.title);
+        memo.setContent(d.content);
+        memo.setTagList(d.tagList);
 
+        access.insertEntity(memo);
         return result;
     }
     /**
@@ -89,7 +102,13 @@ public class MemoAction extends HttpServlet{
     private boolean modifyMemo(Data d){
         boolean result = true;
 
+        Memo memo = new Memo();
+        memo.setId(d.id);
+        memo.setTitle(d.title);
+        memo.setContent(d.content);
+        memo.setTagList(d.tagList);
 
+        access.updateEntity(memo);
         return result;
     }
     /**
@@ -100,7 +119,7 @@ public class MemoAction extends HttpServlet{
     private boolean deleteMemo(Data d){
         boolean result = true;
 
-
+        access.deleteEntity(d.id);
         return result;
     }
 }
