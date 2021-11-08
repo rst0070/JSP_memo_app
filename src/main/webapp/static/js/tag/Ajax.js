@@ -30,7 +30,7 @@
                 name : tagName
             },
             success: () => {
-                this.reload("");
+                this.reload(TAG_NAME);
             }
         });
     }
@@ -63,12 +63,14 @@
         }
         $.ajax({
             url : this.url.memo.create,
+            async: true,
+            contentType: 'application/json; charset=UTF-8',
             type: 'POST',
             dataType: 'json',
-            data : dataObj,
-            success: () => {
-                this.reload(tagList[0]);
-            }
+            data : dataObj
+        }).done(()=>{
+            console.log("asd");
+            this.reload(TAG_NAME);
         });
     }
 

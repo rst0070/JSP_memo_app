@@ -12,7 +12,7 @@ if( isVisitedController != null && isVisitedController.equals("true") ){
    session.setAttribute("visitedController", "false");
 }
 else{
-   response.sendRedirect("/tag");
+   response.sendRedirect("/memolist/");
    return;
 }
 
@@ -29,6 +29,7 @@ LinkedList<Memo> memoList = model.getMemoList();
 <head>
     <title>JSP_MEMO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link type="text/css" rel="stylesheet" href="/static/css/tag/main.css"/>
     <link type="text/css" rel   ="stylesheet" href="/static/css/tag/memo.css"/>
@@ -61,6 +62,7 @@ LinkedList<Memo> memoList = model.getMemoList();
             %>
             <div class="memo" memoid="<%= memo.getId() %>">
                 <div class="memoTitle"><%= memo.getTitle() %></div>
+                <pre class="memoContent"><%= memo.getContent() %></pre>
                 <div class="memoTags">
                     <%
                     while(!tagListOfMemo.isEmpty()){
@@ -69,8 +71,8 @@ LinkedList<Memo> memoList = model.getMemoList();
                         <span class="tag" value="<%= tName %>">#<%= tName %></span>
                     <% } %>
                 </div>
-                <pre class="memoContent"><%= memo.getContent() %></pre>
                 <button class="memoModify">modify</button>
+                <button class="memoDelete">delete</button>
             </div>
             <% } %>
         </section>

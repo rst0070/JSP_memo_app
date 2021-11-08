@@ -16,26 +16,39 @@ public class MemoAction extends HttpServlet{
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
 
-        BufferedWriter bw = new BufferedWriter(res.getWriter());
         // /memo/create 같은 형식으로 옴.
         String path = req.getRequestURI().toString();
         String action = path.substring(6);
         if(action == null) return;
 
+        
         processData(action, req);
-        bw.write("hihihi");
-        bw.flush();
-        bw.close();
+        
+        res.setStatus(200);
+        res.sendRedirect("/memolist/");
     }
 
 
+    /**
+     * json array to LinkedList<String>
+     * @param jsonArr - text of json array that includes tags
+     * @return  list of tags. if null String into input, returns empty list.
+     */
     private LinkedList<String> jsonArrayToStringList(String jsonArr){
         LinkedList<String> result = new LinkedList<String>();
-        JSONArray array = new JSONArray(jsonarr);
-        Iterator<Object> it = array.iterator();
-        while(it.hasNext()){
-            result.add((String)it.next());
+        
+        try{
+            JSONArray array = new JSONArray(jsonArr);
+            Iterator<Object> it = array.iterator();
+            while(it.hasNext()){
+                result.add((String)it.next());
+            }
+        }catch(NullPointerException ne){
+            //if there is no tags, this exception occurs.
+        }catch(JSONException je){
+            je.printStackTrace();
         }
+        
         return result;
     }
 

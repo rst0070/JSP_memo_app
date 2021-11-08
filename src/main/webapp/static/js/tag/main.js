@@ -31,6 +31,12 @@ function main(){
     }
 
     /**
+     * execute AJAX actions to delete memo already exists.
+     */
+    function deleteMemo(memoID){
+        ajax.deleteMemo(memoID);
+    }
+    /**
      * when user want to create new memo.
      */
     $('#NewMemoButton').on('click', ()=>{
@@ -55,7 +61,6 @@ function main(){
             let tag = $(item).attr('value');
             tagList.push(tag); 
         });
-        console.log(tagList);
         
         MEP.setReturnFunction((title, content, tag_list)=>{
             modifyMemo(memoID, title, content, tag_list);
@@ -63,5 +68,12 @@ function main(){
         MEP.setText(title, content, tagList);
         MEP.setVisible(true);
     })
+
+    $('.memoDelete').on('click', (event)=>{
+        console.log("delete");
+        let $element = $(event.target).parent();
+        let memoID = $element.attr("memoid");
+        deleteMemo(memoID);
+    });
 }
 $(main);
