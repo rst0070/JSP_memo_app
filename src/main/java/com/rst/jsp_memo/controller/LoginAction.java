@@ -28,7 +28,7 @@ public class LoginAction extends HttpServlet{
 		if(password != null && realPassword != null && password.equals(realPassword)){
 			HttpSession session = request.getSession();
 			session.setAttribute("login", "true");
-			response.sendRedirect("/tag");
+			response.sendRedirect("/memolist/");
 		}else{
 			response.sendRedirect("/login.jsp");
 		}	
