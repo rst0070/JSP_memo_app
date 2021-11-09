@@ -1,11 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 <body>
     <a href="/test/TagSelectPannel.html">TagSelectPannel</a>
     <a href="/test/editPannel.html">editPannel</a>
     <a href="tag.html">Tag</a>
+    <button id="bt">hi</button>
+    <script>
+
+        var jsonObj = {
+            name : "ads"
+        }
+        $("#bt").on('click', ()=>{
+            $.ajax({
+            url : "/hi",
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json",
+            data : JSON.stringify(jsonObj),
+            success: (data)=>{
+                console.log(data.data);
+            }
+            }).done((data, textStatus, xhr)=>{
+                console.log(data.data);
+            })
+        })
+        
+    </script>
 </body>
 </html>
