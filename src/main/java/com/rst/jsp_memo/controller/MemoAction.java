@@ -24,8 +24,12 @@ public class MemoAction extends HttpServlet{
         
         processData(action, req);
         
+        BufferedWriter bw = new BufferedWriter(res.getWriter());
+        res.setHeader("contentType", "application/json");
         res.setStatus(200);
-        res.sendRedirect("/memolist/");
+        bw.write("{ message : 'hello'}");
+        bw.flush();
+        bw.close();
     }
 
 

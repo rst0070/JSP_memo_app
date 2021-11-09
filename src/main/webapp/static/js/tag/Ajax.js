@@ -64,12 +64,12 @@
         $.ajax({
             url : this.url.memo.create,
             async: true,
-            contentType: 'application/json; charset=UTF-8',
+            contentType: 'application/json',
             type: 'POST',
             dataType: 'json',
             data : dataObj
-        }).done(()=>{
-            console.log("asd");
+        }).done((data)=>{
+            console.log(data.message);
             this.reload(TAG_NAME);
         });
     }
