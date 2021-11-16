@@ -7,47 +7,50 @@
  class Ajax{
     constructor(){
         this.url = {
-            memo : {
-                create : "/memo/create",
-                modify : "/memo/modify",
-                delete : "/memo/delete"
-            },
-            tag : {
-                create : "/tag/create",
-                delete : "/tag/delete"
-            }
-        };
+            tag : '/tag',
+            memo : '/memo'
+        }
     }
 
     createTag(tagName){
         if(!tagName) return;
 
         $.ajax({
-            url : this.url.tag.create,
+            url : this.url.tag,
             type: 'POST',
             dataType: 'json',
-            data : {
+            data : JSON.stringify({
+                action: "create",
                 name : tagName
-            },
+            }),
             success: () => {
                 this.reload(TAG_NAME);
             }
         });
+
+        setTimeout(()=>{
+            this.reload(tagName);
+        }, 2000);
     }
     deleteTag(tagName){
         if(!tagName) return;
 
         $.ajax({
-            url : this.url.tag.delete,
+            url : this.url.tag,
             type: 'POST',
             dataType: 'json',
-            data : {
+            data : JSON.stringify({
+                action: "delete",
                 name : tagName
-            },
+            }),
             success: () => {
                 this.reload("");
             }
         });
+
+        setTimeout(()=>{
+            this.reload("");
+        }, 2000);
     }
 
     createMemo(memoTitle, memoContent, memoTagList){
@@ -55,23 +58,28 @@
         if(!memoContent) memoContent = "";
         if(!memoTagList) memoTagList = [""];
 
-        console.log(this.url.memo.create);
         let dataObj = {
+            action: "create",
             title : memoTitle,
             content : memoContent,
             tagList : memoTagList
         }
+
         $.ajax({
-            url : this.url.memo.create,
+            url : this.url.memo,
             async: true,
             contentType: 'application/json',
             type: 'POST',
             dataType: 'json',
-            data : dataObj
+            data : JSON.stringify(dataObj)
         }).done((data)=>{
             console.log(data.message);
             this.reload(TAG_NAME);
         });
+
+        setTimeout(()=>{
+            this.reload(TAG_NAME);
+        }, 2000);
     }
 
     modifyMemo(memoID, title, content, tagList){
@@ -80,40 +88,51 @@
         if(!content) content = "";
         if(!tagList) tagList = [""];
 
+        let dataObj = {
+            action : "modify",
+            memoID: memoID,
+            title : title,
+            content : content,
+            tagList : tagList
+        };
+
         $.ajax({
-            url : this.url.memo.modify,
+            url : this.url.memo,
             type: 'POST',
             dataType: 'json',
-            data : {
-                memoID: memoID,
-                title : title,
-                content : content,
-                tagList : tagList
-            },
+            data : JSON.stringify(dataObj),
             success: () => {
                 this.reload(tagList[0]);
             }
         });
+        setTimeout(()=>{
+            this.reload(TAG_NAME);
+        }, 2000);
     }
 
     deleteMemo(memoID){
         if(!memoID) return;
 
         $.ajax({
-            url : this.url.memo.delete,
+            url : this.url.memo,
             type: 'POST',
             dataType: 'json',
-            data : {
+            data : JSON.stringify({
+                action: "delete",
                 memoID: memoID
-            },
+            }),
             success: () => {
                 this.reload("");
             }
         });
+        setTimeout(()=>{
+            this.reload(TAG_NAME);
+        }, 2000);
     }
 
     reload(tag_name){
         if(!tag_name) tag_name = "";
+        console.log("going reload");
         window.location.replace("/memolist/"+tag_name);
     }
 }

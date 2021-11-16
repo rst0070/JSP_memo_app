@@ -47,6 +47,7 @@ LinkedList<Memo> memoList = model.getMemoList();
         %>
             <p class="tagName" value="<%= tName %>"><a href="/memolist/<%= tName %>"><%= tName %></a></p>
         <% } %>
+        <p id="editTagButton">Edit Tags</p>
     </header>
     <section class="container">
         <section class="sec1">

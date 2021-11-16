@@ -16,127 +16,69 @@ public class MemoAction extends HttpServlet{
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException{
 
-        // /memo/create 같은 형식으로 옴.
-        String path = req.getRequestURI().toString();
-        String action = path.substring(6);
-        if(action == null) return;
-
-        
-        processData(action, req);
-        
-        BufferedWriter bw = new BufferedWriter(res.getWriter());
-        res.setHeader("contentType", "application/json");
-        res.setStatus(200);
-        bw.write("{ message : 'hello'}");
-        bw.flush();
-        bw.close();
-    }
-
-
-    /**
-     * json array to LinkedList<String>
-     * @param jsonArr - text of json array that includes tags
-     * @return  list of tags. if null String into input, returns empty list.
-     */
-    private LinkedList<String> jsonArrayToStringList(String jsonArr){
-        LinkedList<String> result = new LinkedList<String>();
-        
-        try{
-            JSONArray array = new JSONArray(jsonArr);
-            Iterator<Object> it = array.iterator();
-            while(it.hasNext()){
-                result.add((String)it.next());
-            }
-        }catch(NullPointerException ne){
-            //if there is no tags, this exception occurs.
-        }catch(JSONException je){
-            je.printStackTrace();
-        }
-        
-        return result;
-    }
-
-    /**
-     * classify action, and process case by case
-     * @param action - type of action : "create", "delete", "modify"
-     * @param req - request from client.
-     */
-    private boolean processData(String action, HttpServletRequest req){
-        Data data = new Data();
+        JSONObject data = readJsonObject(req.getReader());
+        String action = (String)data.get("action");
+        System.out.println(action);       
         
         switch(action){
-            case "delete":
-            data.id = req.getParameter("memoID");
-            return deleteMemo(data);
-
-            case "modify":
-            data.id = req.getParameter("memoID");
-            data.title = req.getParameter("title");
-            data.content = req.getParameter("content");
-            data.tagList = jsonArrayToStringList(req.getParameter("tagList"));
-            return modifyMemo(data);
-
             case "create":
-            data.title = req.getParameter("title");
-            data.content = req.getParameter("content");
-            data.tagList = jsonArrayToStringList(req.getParameter("tagList"));
-            return createMemo(data);
-
-            default: return false;
+            create(data); break;
+            case "modify":
+            modify(data); break;
+            case "delete":
+            delete(data); break;
+            default: break;
         }
+
+        res.setStatus(200);
     }
 
-    static class Data{
-        String id = null;
-        String title = null;
-        String content = null;
-        LinkedList<String> tagList = null;
+    private JSONObject readJsonObject(BufferedReader br) throws IOException{
+        StringBuilder sb = new StringBuilder();
+        String str;
+        while((str = br.readLine()) != null)
+            sb.append(str);
+        System.out.println(sb.toString());
+        JSONObject jobj = new JSONObject(sb.toString());
+        return jobj;
     }
 
     private MemoAccess access = MemoAccess.getAccess();
-    /**
-     * 
-     * @param d contains title, content, tagList. Id will defined by Memo obj
-     * @return  success: true not: false
-     */
-    private boolean createMemo(Data d){
-        boolean result = true;
 
-        Memo memo = new Memo();
-        memo.setId();
-        memo.setTitle(d.title);
-        memo.setContent(d.content);
-        memo.setTagList(d.tagList);
-
-        access.insertEntity(memo);
-        return result;
+    private void create(JSONObject data){
+        String title = (String)data.get("title");
+        String content = (String)data.get("content");
+        Iterator tagIt = data.getJSONArray("tagList").iterator();
+        
+        Memo m = memoObj(title, content, tagIt);
+        m.setId();
+        access.insertEntity(m);
     }
-    /**
-     * 
-     * @param d contains id, title, content and tagList
-     * @return  success: true not: false
-     */
-    private boolean modifyMemo(Data d){
-        boolean result = true;
 
-        Memo memo = new Memo();
-        memo.setId(d.id);
-        memo.setTitle(d.title);
-        memo.setContent(d.content);
-        memo.setTagList(d.tagList);
-
-        access.updateEntity(memo);
-        return result;
+    private void modify(JSONObject data){
+        String id = (String)data.get("memoID");
+        String title = (String)data.get("title");
+        String content = (String)data.get("content");
+        Iterator tagIt = data.getJSONArray("tagList").iterator();
+        
+        Memo m = memoObj(title, content, tagIt);
+        m.setId(id);
+        access.updateEntity(m);
     }
-    /**
-     * 
-     * @param d only contains id of memo to delete
-     * @return  success: true not: false
-     */
-    private boolean deleteMemo(Data d){
-        boolean result = true;
 
-        access.deleteEntity(d.id);
-        return result;
+    private void delete(JSONObject data){
+        String id = (String)data.get("memoID");
+        access.deleteEntity(id);
+    }
+
+    private Memo memoObj(String title, String content, Iterator tagIterator){
+        LinkedList<String> tagList = new LinkedList<String>();
+        while(tagIterator.hasNext()) tagList.add((String)tagIterator.next());
+
+        Memo m = new Memo();
+        m.setTitle(title);
+        m.setContent(content);
+        m.setTagList(tagList);
+        return m;
     }
 }

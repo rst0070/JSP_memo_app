@@ -4,12 +4,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.ServletException;
 
 import com.rst.jsp_memo.data.MetaDataAccess;
 import com.rst.jsp_memo.data.MetaData;
+import com.rst.jsp_memo.data.DBConnection;
 
 public class LoginAction extends HttpServlet{
 	
+	@Override
+	public void init() throws ServletException {
+		DBConnection.testingMode(false);
+	 }
 	static final long serialVersionUID = 1L;
 	
 	private MetaDataAccess access = MetaDataAccess.getAccess();
