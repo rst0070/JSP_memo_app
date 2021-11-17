@@ -1,24 +1,32 @@
+*{
+  background: #141414;
+  color: white;
+}
 #login-box {
     margin-top: 5em;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
     
-    border: 1px solid black;
+    border: 1px solid #bdbdbd;
     width: 50em;
     height: 25em;
-  }
+}
   
   input[type="password"] {
     margin-top: 1em;
     height: 2em;
     width: 20em;
+    border-radius: 0.2em;
+    border: 1px solid #bdbdbd;
   }
   
   input[type="submit"] {
     margin-top: 1em;
     height: 2em;
     width: 20em;
+    border-radius: 0.2em;
+    border: 1px solid #bdbdbd;
   }
 
   #changepw-box{
@@ -28,7 +36,7 @@
     margin-right: auto;
     text-align: center;
     
-    border: 1px solid black;
+    border: 1px solid #bdbdbd;
     width: 50em;
     height: 25em;
   }

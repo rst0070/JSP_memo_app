@@ -20,15 +20,12 @@ class TagEditPannel{
             marginLeft: "auto",
             marginRight: "auto",
             marginTop: "5em",
-            background:"white",
             padding:"1em",
             borderRadius:"0.2em",
             boxShadow:"0 0 0 1px gray"
         });
 
-        if(!tagList)
-            this.allTagList = [];
-        else 
+        if(tagList)
             this.allTagList = tagList;
 
         this.setList();
@@ -60,10 +57,12 @@ class TagEditPannel{
             height:"20em",
             overflow:"auto"
         });
-        if(this.allTagList.length > 0)
+        if(this.allTagList)
             this.allTagList.forEach(element => {
-                this.$tagListDiv.append("<input id='tagCheckbox"+element+"' type='checkbox' class='tagCheckbox' value='" + element + "'/>");
-                this.$tagListDiv.append("<label for='tagCheckbox"+element+"' >" + element + "</label><br/>");
+                if(element){
+                    this.$tagListDiv.append("<input id='tagCheckbox"+element+"' type='checkbox' class='tagCheckbox' value='" + element + "'/>");
+                    this.$tagListDiv.append("<label for='tagCheckbox"+element+"' >" + element + "</label><br/>");    
+                }
             });
         this.$tagListDiv.append("<input id='newTagText' style='width: 90%;' type='text' placeholder='type new tag name and press create button'/><br/>");
     }

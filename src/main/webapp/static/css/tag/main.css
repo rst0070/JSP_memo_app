@@ -1,8 +1,13 @@
+*{
+    color: white;
+    background: #141414;
+}
 body{
     margin:0;
     position: absolute;
     width: 100%;
     height: 100%;
+    background: #141414;
 }
 
 

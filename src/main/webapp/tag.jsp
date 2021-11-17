@@ -41,13 +41,14 @@ LinkedList<Memo> memoList = model.getMemoList();
 </head>
 <body>
     <header class="navBar">
-        <p><a href="/memolist/">All Memos</a></p>
+        <p class="tagName"><a href="/memolist/">All Memos</a></p>
         <% while(!tagList.isEmpty()){ 
              String tName = tagList.poll().getName();    
         %>
             <p class="tagName" value="<%= tName %>"><a href="/memolist/<%= tName %>"><%= tName %></a></p>
         <% } %>
-        <p id="editTagButton">Edit Tags</p>
+        <p class="special" id="editTagButton">Edit Tags</p>
+        <p class="special" ><a href="/logout">Logout</a></p>
     </header>
     <section class="container">
         <section class="sec1">

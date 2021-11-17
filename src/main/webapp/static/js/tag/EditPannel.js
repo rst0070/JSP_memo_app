@@ -32,7 +32,6 @@
             marginLeft: "auto",
             marginRight: "auto",
             marginTop: "5em",
-            background:"white",
             padding:"1em",
             borderRadius:"0.2em",
             boxShadow:"0 0 0 1px gray",

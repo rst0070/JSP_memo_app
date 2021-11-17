@@ -39,6 +39,10 @@
         <servlet-class>com.rst.jsp_memo.controller.MemosByTag</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>com.rst.jsp_memo.controller.Logout</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>LoginAction</servlet-name>
         <servlet-class>com.rst.jsp_memo.controller.LoginAction</servlet-class>
     </servlet>
@@ -54,6 +58,10 @@
     <servlet-mapping>
         <servlet-name>TagPage</servlet-name>
         <url-pattern>/memolist/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginAction</servlet-name>

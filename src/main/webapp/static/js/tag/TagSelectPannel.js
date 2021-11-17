@@ -26,7 +26,6 @@
             marginLeft: "auto",
             marginRight: "auto",
             marginTop: "5em",
-            background:"white",
             padding:"1em",
             borderRadius:"0.2em",
             boxShadow:"0 0 0 1px gray"
@@ -62,8 +61,10 @@
             overflow:"auto"
         });
         this.allTagList.forEach(element => {
-            this.$selectTagDiv.append("<input id='tagCheckbox"+element+"' type='checkbox' class='tagCheckbox' value='" + element + "'/>");
-            this.$selectTagDiv.append("<label for='tagCheckbox"+element+"' >" + element + "</label><br/>");
+            if(element){
+                this.$selectTagDiv.append("<input id='tagCheckbox"+element+"' type='checkbox' class='tagCheckbox' value='" + element + "'/>");
+                this.$selectTagDiv.append("<label for='tagCheckbox"+element+"' >" + element + "</label><br/>");    
+            }
         });
     }
     setSaveButton(){
