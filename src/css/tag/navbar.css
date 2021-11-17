@@ -16,3 +16,7 @@
 
     background-image: linear-gradient(45deg, #fff8c7, #fced7c);
 }
+
+#editTagButton {
+    float: right;
+}

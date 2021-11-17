@@ -33,6 +33,8 @@ class Ajax{
                 this.reload("");
             }
         });
+
+        console.log("create "+tagName)
     }
     deleteTag(tagName){
         if(!tagName) return;
@@ -48,6 +50,7 @@ class Ajax{
                 this.reload("");
             }
         });
+        console.log("delete "+tagName)
     }
 
     createMemo(memoTitle, memoContent, memoTagList){

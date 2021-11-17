@@ -1,6 +1,7 @@
 import { ajax } from "./Ajax.js";
 import { memoEditPannel } from "./EditPannel.js";
 import { tagSelectPannel } from "./TagSelectPannel.js";
+import { tagEditPannel } from "./TagEditPannel.js";
 //rest api??
 function main(){
     
@@ -15,9 +16,30 @@ function main(){
         return list;
     }
 
+    
     const allTagList = getAllTagsFromPage();
+    const TEP = new tagEditPannel("tagEditPannel", allTagList)
     const TSP = new tagSelectPannel("selectTagContainer", allTagList);
     const MEP = new memoEditPannel("memoEditContainer", TSP);
+
+
+    function tagAction(action, list){
+        if(action == "create"){
+            list.forEach(element => {
+                ajax.createTag(element);
+            })
+        }else{
+            list.forEach(element => {
+                ajax.deleteTag(element);
+            })
+        }
+    }
+    TEP.setReturnFunction(tagAction);
+
+    $('#editTagButton').on('click', ()=>{
+        TEP.setVisible(true);
+    })
+
 
     function createNewMemo(title, content, tag_list){
         ajax.createMemo(title, content, tag_list);
