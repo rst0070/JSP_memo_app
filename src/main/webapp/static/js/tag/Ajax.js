@@ -28,9 +28,7 @@
             }
         });
 
-        setTimeout(()=>{
-            this.reload(tagName);
-        }, 2000);
+
     }
     deleteTag(tagName){
         if(!tagName) return;
@@ -48,9 +46,6 @@
             }
         });
 
-        setTimeout(()=>{
-            this.reload("");
-        }, 2000);
     }
 
     createMemo(memoTitle, memoContent, memoTagList){

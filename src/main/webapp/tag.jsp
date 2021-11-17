@@ -80,6 +80,7 @@ LinkedList<Memo> memoList = model.getMemoList();
     </section>
     <div id="selectTagContainer" style="display:none;"></div>
     <div id="memoEditContainer" style="display: none;"></div>
+    <div id="tagEditPannel" style="display: none;"></div>
 </body>
 
 </html>

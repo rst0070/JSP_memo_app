@@ -31,6 +31,10 @@
         <servlet-class>com.rst.jsp_memo.controller.MemoAction</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>TagAction</servlet-name>
+        <servlet-class>com.rst.jsp_memo.controller.TagAction</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>TagPage</servlet-name>
         <servlet-class>com.rst.jsp_memo.controller.MemosByTag</servlet-class>
     </servlet>
@@ -44,11 +48,15 @@
         <url-pattern>/memo/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>TagAction</servlet-name>
+        <url-pattern>/tag/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>TagPage</servlet-name>
         <url-pattern>/memolist/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginAction</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <url-pattern>/login/*</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -20,22 +20,32 @@ public class LoginAction extends HttpServlet{
 	
 	private MetaDataAccess access = MetaDataAccess.getAccess();
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		
 		String password = request.getParameter("pw");
-
-		//패스워드 읽는중 예외발생시 예외내용 리스폰스로 사용자에게 전달.
 		String realPassword = "";
 
 		MetaData data = access.selectEntity("password");
 		realPassword = data.getValue();
 		
 		
-		//예외 발생하지 않을시 session 작업
-		//main page로 redirect한다.
 		if(password != null && realPassword != null && password.equals(realPassword)){
-			HttpSession session = request.getSession();
-			session.setAttribute("login", "true");
-			response.sendRedirect("/memolist/");
-		}else{
+			//예외 발생하지않고 패스워드 맞을때
+			String path = request.getRequestURI().toString();
+			if(path == null) path = "/";
+			if(path.equals("/login/change")){//password 변경 요청
+				
+				MetaData newPw = new MetaData();
+				newPw.setName("password");
+				newPw.setValue(request.getParameter("new_pw"));
+				System.out.println("new password:" + newPw.getValue());
+				access.updateEntity(newPw);
+				response.sendRedirect("/login.jsp");
+			}else{// login요청
+				HttpSession session = request.getSession();
+				session.setAttribute("login", "true");
+				response.sendRedirect("/memolist/");
+			}
+		}else{//예외 or 패스워드 틀릴때
 			response.sendRedirect("/login.jsp");
 		}	
 	}
