@@ -4,6 +4,12 @@ public class MetaData implements Entity {
     private String name = null;
     private String value = null;
 
+    public MetaData(String name, String value){
+        this.name = name; this.value = value;
+    }
+
+    public MetaData(){}
+
     @Override
     public boolean checkValidation(){
         if(name == null) return false;

@@ -13,7 +13,7 @@
 		<input type="password" name="pw" placeholder="password"/><br/>
 		<input type="submit" value="login"/>
 	</form>
-	<form id="changepw-box" action="/login/change" method="POST">
+	<form id="changepw-box" action="/change-password" method="POST">
 		<h1>Change Password</h1>
 		<input type="password" name="pw" placeholder="present password"/><br/>
 		<input type="password" name="new_pw" placeholder="new password"/><br/>
